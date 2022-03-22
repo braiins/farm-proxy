@@ -1,0 +1,41 @@
+# Sample configuration
+
+[[server]]
+name = "S1"
+# Port to listen on
+port = 3336
+# Bonus related to devfee
+#slushpool_bos_bonus = "bosBonusUserName"
+# BOS referral code
+#bos_referral_code = "referralCode"
+
+[[target]]
+# Name of this target
+name = "SP"
+# Pool URL
+url = "stratum+tcp://stratum.slushpool.com:3333"
+# Mining identity that FP should perform initial authorization with.
+# Format: `<tag>[.<worker_name>]`
+user_identity = "userName.workerName"
+# Maximum number of mining session aggregated per connection
+#aggregation = 50
+
+[[routing]]
+# Routing Domain name
+name = "RD"
+# List of servers that will be exclusive used within this Routing Domain
+from = ["S1"]
+
+[[routing.goal]]
+# Name of this goal
+name = "Primary Goal"
+# Weight of this goal
+#hr_weight = 100
+# one of "single", "double", "<number>"
+#utilized_targets = "single"
+
+[[routing.goal.level]]
+# Name of this Goal Level
+name = "Primary Goal"
+# Targets that HR will be sent to for this Goal
+targets = ["SP"]

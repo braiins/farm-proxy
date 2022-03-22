@@ -1,0 +1,35 @@
+# Full server configuration
+[[server]]
+name = "S1"
+port = 3336
+
+# Minimal server configuration
+[[server]]
+name = "S2"
+port = 3337
+
+# Full target configuration
+[[target]]
+name = "SP-US"
+url = "stratum+tcp://us-east.stratum.slushpool.com/"
+user_identity = "userName.workerName"
+
+[[target]]
+name = "SP-EU"
+url = "stratum+tcp://eu.stratum.slushpool.com"
+user_identity = "userName.workerName"
+
+[[routing]]
+from = ["S1", "S2"]
+
+[[routing.goal]]
+hr_weight = 100
+name = "Goal 100%"
+
+[[routing.goal.level]]
+name = "Primary"
+targets = ["SP-US"]
+
+[[routing.goal.level]]
+name = "Backup"
+targets = ["SP-EU"]

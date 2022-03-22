@@ -1,0 +1,19 @@
+# Minimal configuration
+
+[[server]]
+name = "S1"
+port = 3336
+
+[[target]]
+name = "SP"
+url = "stratum+tcp://stratum.slushpool.com:3333"
+user_identity = "userName.workerName"
+
+[[routing]]
+from = ["S1"]
+
+[[routing.goal]]
+name = "Primary Goal"
+
+[[routing.goal.level]]
+targets = ["SP"]
