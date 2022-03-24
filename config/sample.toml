@@ -3,7 +3,7 @@
 [[server]]
 name = "S1"
 # Port to listen on
-port = 3336
+port = 3333
 # Bonus related to devfee
 #slushpool_bos_bonus = "bosBonusUserName"
 # BOS referral code
@@ -31,8 +31,6 @@ from = ["S1"]
 name = "Primary Goal"
 # Weight of this goal
 #hr_weight = 100
-# one of "single", "double", "<number>"
-#utilized_targets = "single"
 
 [[routing.goal.level]]
 # Name of this Goal Level

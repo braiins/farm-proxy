@@ -68,7 +68,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1647601938638,
+  "iteration": 1648563905871,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -287,7 +287,7 @@
           "expr": "FP_application_version_details",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{version_full}}",
+          "legendFormat": "Version: {{version_full}}",
           "refId": "B"
         }
       ],
@@ -343,7 +343,7 @@
             "uid": "${DS_PROM1}"
           },
           "exemplar": true,
-          "expr": "process_start_time_seconds{job=\"farm-proxy\"}*1000",
+          "expr": "FP_start_time_ms",
           "hide": false,
           "interval": "",
           "legendFormat": "started at:",
@@ -1315,7 +1315,7 @@
                 "uid": "${DS_PROM1}"
               },
               "exemplar": true,
-              "expr": "sum(rate(FP_shares_total{direction=\"upstream\", status=~\"accepted\", server!~\".*Devfee-[0-9]$\"}[5m])) by (server)",
+              "expr": "sum(rate(FP_shares_total{direction=\"upstream\", status=\"validated\", type=\"standard\"}[5m])) by (server)",
               "interval": "",
               "legendFormat": "{{server}}",
               "refId": "A"
@@ -1376,8 +1376,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Client dashboard",
-  "uid": "tPtUACL7k",
-  "version": 33,
+  "title": "Client Dashboard",
+  "uid": "9R0uBpynk",
+  "version": 1,
   "weekStart": ""
 }

@@ -1,12 +1,12 @@
 # Full server configuration
 [[server]]
 name = "S1"
-port = 3336
+port = 3333
 
 # Minimal server configuration
 [[server]]
 name = "S2"
-port = 3337
+port = 3334
 
 # Full target configuration
 [[target]]

@@ -2,7 +2,7 @@
 
 [[server]]
 name = "S1"
-port = 3336
+port = 3333
 
 [[target]]
 name = "SP"

@@ -19,9 +19,4 @@ scrape_configs:
     metrics_path: "/metrics"
     static_configs:
       - targets: ["172.17.0.1:8080"]
-remote_write:
-  - url: "localhost:8080/metrics"
-    basic_auth:
-      username: "monitoring"
-      password: "monitoring"
 
