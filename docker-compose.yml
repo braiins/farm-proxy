@@ -111,7 +111,7 @@ services:
       org.label-schema.group: "monitoring"
 
   farm-proxy:
-    image: docker.ii.zone/pool/main/farm-proxy:latest
+    image: braiinssystems/farm-proxy:latest
     container_name: farm-proxy
     volumes:
       - "../config/sample.toml:/conf/farm_proxy.yml"
