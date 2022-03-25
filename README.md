@@ -24,9 +24,9 @@ git --version
 ```
 
 ## Configure farm-proxy
-### Checkout farm-proxy
+### Clone farm-proxy
 ```
-git checkout https://github.com/braiins/farm-proxy.git
+git clone https://github.com/braiins/farm-proxy.git
 ```
 1. Prepare your farm_proxy configuration based on examples in config directory
 2. Tweak docker-compose.yml file according to your configuration
