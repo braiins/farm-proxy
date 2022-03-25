@@ -114,7 +114,7 @@ services:
     image: braiinssystems/farm-proxy:latest
     container_name: farm-proxy
     volumes:
-      - "../config/sample.toml:/conf/farm_proxy.yml"
+      - "./config/sample.toml:/conf/farm_proxy.yml"
     environment:
       - CONF_PATH=/conf/farm_proxy.yml
     restart: unless-stopped
