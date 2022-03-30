@@ -127,7 +127,7 @@
             "uid": "${DS_PROM1}"
           },
           "exemplar": true,
-          "expr": "FP_start_time_s",
+          "expr": "FP_start_time_ms",
           "interval": "",
           "legendFormat": "Router start time - {{instance}}:",
           "refId": "A"
@@ -227,7 +227,7 @@
           "refId": "A"
         }
       ],
-      "title": "All Shares",
+      "title": "Hashrate",
       "type": "timeseries"
     },
     {
@@ -416,7 +416,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisLabel": "",
+            "axisLabel": "submit/s",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
@@ -497,7 +497,7 @@
           "refId": "A"
         }
       ],
-      "title": "All Submits",
+      "title": "Submission Rate",
       "type": "timeseries"
     },
     {
