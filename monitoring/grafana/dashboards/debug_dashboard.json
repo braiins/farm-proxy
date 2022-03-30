@@ -223,7 +223,7 @@
           "exemplar": true,
           "expr": "sum(rate(FP_shares_total{direction=~\"$direction\",status=~\"$status\", type=~\"$type\"}[5m]) * 4.294967296) by (server, direction, status, type)",
           "interval": "",
-          "legendFormat": "{{server}} {{status}} {{direction}} {{type}} shares",
+          "legendFormat": "{{server}} {{status}} {{direction}} {{type}} hashrate",
           "refId": "A"
         }
       ],
