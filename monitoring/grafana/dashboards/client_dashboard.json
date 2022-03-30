@@ -68,12 +68,12 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1648563905871,
+  "iteration": 1648651132863,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "description": "",
+      "description": "Hashrate received from miners.",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -151,7 +151,7 @@
       "type": "stat"
     },
     {
-      "description": "",
+      "description": "Hashrate sent to target pool(s).",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -235,6 +235,7 @@
       "type": "stat"
     },
     {
+      "description": "Version of Farm Proxy",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -294,6 +295,7 @@
       "type": "stat"
     },
     {
+      "description": "Most recent Farm Proxy start date",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -365,6 +367,7 @@
       "type": "stat"
     },
     {
+      "description": "Validity of certificate for devfee hashrate aggregation",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -440,7 +443,7 @@
       "type": "stat"
     },
     {
-      "description": "",
+      "description": "Shares received from miners",
       "fieldConfig": {
         "defaults": {
           "decimals": 3,
@@ -559,7 +562,7 @@
       "type": "stat"
     },
     {
-      "description": "",
+      "description": "Shares sent to target pool(s).",
       "fieldConfig": {
         "defaults": {
           "decimals": 3,
@@ -678,6 +681,7 @@
       "type": "stat"
     },
     {
+      "description": "Count of currently connected miners by hashrate type",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -750,6 +754,7 @@
       "type": "stat"
     },
     {
+      "description": "Count of connections to target pool(s) by hashrate type",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -821,7 +826,7 @@
       "type": "stat"
     },
     {
-      "description": "",
+      "description": "Hashrate received from miners",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -921,7 +926,7 @@
       "type": "timeseries"
     },
     {
-      "description": "",
+      "description": "Theoretical aggregation based on ratio of upstream and downstream connections. Theoretical means the real aggregation can be lower due to network events (e.g. reconnections or job resets).",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -993,7 +998,7 @@
       "type": "stat"
     },
     {
-      "description": "",
+      "description": "History of theoretical aggregation",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1089,7 +1094,7 @@
       "type": "timeseries"
     },
     {
-      "description": "",
+      "description": "Hashrate sent to target pool(s)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1195,6 +1200,7 @@
       "id": 57,
       "panels": [
         {
+          "description": "Split of standard hashrate among defined goals.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1258,7 +1264,7 @@
           "type": "piechart"
         },
         {
-          "description": "",
+          "description": "Split of standard hashrate among targets (IP addresses behind pool URL).",
           "fieldConfig": {
             "defaults": {
               "color": {
