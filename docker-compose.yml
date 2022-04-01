@@ -87,7 +87,7 @@ services:
       org.label-schema.group: "monitoring"
 
   farm-proxy:
-    image: braiinssystems/farm-proxy:1.0.0-rc2
+    image: braiinssystems/farm-proxy:1.0.0-rc3
     container_name: farm-proxy
     volumes:
       - "./config/sample.toml:/conf/farm_proxy.yml"
