@@ -496,7 +496,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(FP_shares_total{direction=\"downstream\", status=\"invalid\", type=\"$type\"})",
+          "expr": "sum(FP_shares_total{direction=\"downstream\", status!=\"accepted\", type=\"$type\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "Invalid",
@@ -508,7 +508,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(FP_shares_total{direction=\"downstream\", status=\"invalid\", type=\"$type\"}) / sum(FP_shares_total{direction=\"downstream\", type=\"$type\"}) * 100",
+          "expr": "sum(FP_shares_total{direction=\"downstream\", status!=\"accepted\", type=\"$type\"}) / sum(FP_shares_total{direction=\"downstream\", type=\"$type\"}) * 100",
           "hide": false,
           "interval": "",
           "legendFormat": "Invalid ratio",
@@ -615,7 +615,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(FP_shares_total{direction=\"upstream\", status=\"rejected\",type=\"$type\"})",
+          "expr": "sum(FP_shares_total{direction=\"upstream\", status!=\"validated\",type=\"$type\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "Invalid",
@@ -627,7 +627,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(FP_shares_total{direction=\"upstream\", status=\"rejected\",type=\"$type\"}) / sum(FP_shares_total{direction=\"upstream\", type=\"$type\"}) * 100",
+          "expr": "sum(FP_shares_total{direction=\"upstream\", status!=\"validated\",type=\"$type\"}) / sum(FP_shares_total{direction=\"upstream\", type=\"$type\"}) * 100",
           "hide": false,
           "interval": "",
           "legendFormat": "Invalid ratio",
@@ -861,9 +861,9 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(rate(FP_shares_total{direction=\"downstream\", status=\"accepted\", type=~\"$type\"}[5m]) * 4.294967296) by (status, type)",
+          "expr": "sum(rate(FP_shares_total{direction=\"downstream\", status=\"accepted\", type=~\"$type\"}[5m]) * 4.294967296) by (type)",
           "interval": "",
-          "legendFormat": "{{type}} hashrate ({{status}})",
+          "legendFormat": "{{type}} hashrate (accepted)",
           "refId": "A"
         },
         {
@@ -872,10 +872,10 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(rate(FP_shares_total{direction=\"downstream\", status=\"invalid\", type=~\"$type\"}[1m]) * 4.294967296) by (status, type)",
+          "expr": "sum(rate(FP_shares_total{direction=\"downstream\", status!=\"accepted\", type=~\"$type\"}[1m]) * 4.294967296) by (type)",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{type}} hashrate ({{status}})",
+          "legendFormat": "{{type}} hashrate (invalid)",
           "refId": "B"
         }
       ],
@@ -1125,7 +1125,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(rate(FP_shares_total{direction=\"upstream\", status=\"validated\", type=~\"$type\"}[5m]) * 4.294967296) by (status, type)",
+          "expr": "sum(rate(FP_shares_total{direction=\"upstream\", status=\"validated\", type=~\"$type\"}[5m]) * 4.294967296) by (type)",
           "interval": "",
           "legendFormat": "{{type}} hashrate (accepted)",
           "refId": "A"
@@ -1136,7 +1136,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(rate(FP_shares_total{direction=\"upstream\", status=\"rejected\", type=~\"$type\"}[1m]) * 4.294967296) by (status, type)",
+          "expr": "sum(rate(FP_shares_total{direction=\"upstream\", status!=\"validated\", type=~\"$type\"}[1m]) * 4.294967296) by (type)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{type}} hashrate (invalid)",
