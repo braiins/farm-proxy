@@ -1,8 +1,5 @@
 version: '3'
 
-networks:
-  monitor-net:
-    driver: bridge
 volumes:
   prometheus_data: {}
   grafana_data: {}
@@ -11,6 +8,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    network_mode: "host"
     volumes:
       - ./monitoring/prometheus:/etc/prometheus
       - prometheus_data:/prometheus
@@ -22,10 +20,6 @@ services:
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
     restart: unless-stopped
-    ports:
-      - "9090:9090"
-    networks:
-      - monitor-net
     logging:
       driver: "json-file"
       options:
@@ -38,6 +32,7 @@ services:
   nodeexporter:
     image: prom/node-exporter:latest
     container_name: nodeexporter
+    network_mode: "host"
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -48,10 +43,6 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
     restart: unless-stopped
-    ports:
-      - "9100:9100"
-    networks:
-      - monitor-net
     logging:
       driver: "json-file"
       options:
@@ -64,6 +55,7 @@ services:
   grafana:
     image: grafana/grafana:8.4.0
     container_name: grafana
+    network_mode: "host"
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
@@ -73,10 +65,6 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=true
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/default_dashboards/client_dashboard.json
     restart: unless-stopped
-    ports:
-      - "3000:3000"
-    networks:
-      - monitor-net
     logging:
       driver: "json-file"
       options:
@@ -89,6 +77,7 @@ services:
   farm-proxy:
     image: braiinssystems/farm-proxy:1.0.0-rc3
     container_name: farm-proxy
+    network_mode: "host"
     volumes:
       - "./config/sample.toml:/conf/farm_proxy.yml"
     environment:
@@ -96,11 +85,6 @@ services:
       - RUST_LOG=debug
       - RUST_BACKTRACE=full
     restart: unless-stopped
-    ports:
-      - "8080:8080"
-      - "3333:3333"
-    networks:
-      - monitor-net
     logging:
       driver: "json-file"
       options:

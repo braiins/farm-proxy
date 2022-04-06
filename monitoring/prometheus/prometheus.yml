@@ -9,14 +9,10 @@ scrape_configs:
 
   - job_name: "node"
     static_configs:
-    - targets: ["nodeexporter:9100"]
-
-  - job_name: "process"
-    static_configs:
-      - targets: ["processexporter:9256"]
+    - targets: ["localhost:9100"]
 
   - job_name: "farm-proxy"
     metrics_path: "/metrics"
     static_configs:
-      - targets: ["172.17.0.1:8080"]
+      - targets: ["localhost:8080"]
 
