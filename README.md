@@ -49,7 +49,7 @@ git clone https://github.com/braiins/farm-proxy.git
 ### Changing configuration
 Change configuration file according to your needs
 ```
-docker-compose restart -d farm-proxy
+docker-compose restart farm-proxy
 ```
 ### Updating farm-proxy
 ```
