@@ -33,7 +33,5 @@ name = "Primary Goal"
 #hr_weight = 100
 
 [[routing.goal.level]]
-# Name of this Goal Level
-name = "Primary Goal"
 # Targets that HR will be sent to for this Goal
 targets = ["SP"]

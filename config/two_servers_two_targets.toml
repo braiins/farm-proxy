@@ -27,9 +27,7 @@ hr_weight = 100
 name = "Goal 100%"
 
 [[routing.goal.level]]
-name = "Primary"
 targets = ["SP-US"]
 
 [[routing.goal.level]]
-name = "Backup"
 targets = ["SP-EU"]
