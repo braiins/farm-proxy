@@ -75,7 +75,7 @@ services:
       org.label-schema.group: "monitoring"
 
   farm-proxy:
-    image: braiinssystems/farm-proxy:v1.0.0-rc4
+    image: braiinssystems/farm-proxy:v1.0.0-rc5
     container_name: farm-proxy
     network_mode: "host"
     volumes:
