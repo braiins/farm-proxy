@@ -3,7 +3,7 @@
 [[server]]
 name = "S1"
 # Port to listen on
-port = 3333
+port = 3336
 # Bonus related to devfee
 #slushpool_bos_bonus = "bosBonusUserName"
 # BOS referral code
