@@ -1,10 +1,20 @@
+# License
+
+Any content in this repository is released under our proprietary License. The current version of the License is available in this repository in a separate [file](LICENSE.md), and can be also accessed at the following website: https://braiins.com/farm-proxy/license.
+
+By downloading, copying, installing, or otherwise using all or any content from this repository, you accept all the terms and conditions set out in the License, so please, read the License carefully. If you do not agree with any of the terms and conditions of the License, do not use any content from this repository and delete or destroy any such content that is already in your possession or control.
+
+Please, keep in mind that the License automatically renews every month and from time to time it can be changed or amended, so revisit the License regularly to keep track of any changes. The date when the License was last materially changed or amended is listed in the header of the License for convenience.
+
+If you have any other questions, please contact us at info@braiins.com.
+
 # Installation manual
 
 ## Prerequisites
 ### docker & docker-compose
 #### Linux
 - Follow [docker installation instructions](https://docs.docker.com/engine/install/ubuntu/)
-- Follow [Optional docker post installation steps](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
+- Follow [optional docker post installation steps](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
 - Follow [docker-compose installation](https://docs.docker.com/compose/install/)
 
 #### RPi
