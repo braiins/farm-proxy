@@ -1,10 +1,25 @@
 version: '3'
-
 volumes:
   prometheus_data: {}
   grafana_data: {}
-
 services:
+  farm-proxy:
+    image: braiinssystems/farm-proxy:v1.0.0-rc8
+    container_name: farm-proxy
+    network_mode: "host"
+    volumes:
+      - "./config/sample.toml:/conf/farm_proxy.yml"
+    environment:
+      - CONF_PATH=/conf/farm_proxy.yml
+      - RUST_LOG=debug
+      - RUST_BACKTRACE=full
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "50"
+        compress: "true"
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -28,7 +43,6 @@ services:
         compress: "true"
     labels:
       org.label-schema.group: "monitoring"
-
   nodeexporter:
     image: prom/node-exporter:latest
     container_name: nodeexporter
@@ -51,7 +65,6 @@ services:
         compress: "true"
     labels:
       org.label-schema.group: "monitoring"
-
   grafana:
     image: grafana/grafana:8.4.0
     container_name: grafana
@@ -73,21 +86,3 @@ services:
         compress: "true"
     labels:
       org.label-schema.group: "monitoring"
-
-  farm-proxy:
-    image: braiinssystems/farm-proxy:v1.0.0-rc7
-    container_name: farm-proxy
-    network_mode: "host"
-    volumes:
-      - "./config/sample.toml:/conf/farm_proxy.yml"
-    environment:
-      - CONF_PATH=/conf/farm_proxy.yml
-      - RUST_LOG=debug
-      - RUST_BACKTRACE=full
-    restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "100m"
-        max-file: "50"
-        compress: "true"
