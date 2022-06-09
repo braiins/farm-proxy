@@ -2,9 +2,10 @@ version: '3'
 volumes:
   prometheus_data: {}
   grafana_data: {}
+  scanner_data: {}
 services:
   farm-proxy:
-    image: braiinssystems/farm-proxy:v1.0.0-rc8
+    image: braiinssystems/farm-proxy:v1.0.0-rc9
     container_name: farm-proxy
     network_mode: "host"
     volumes:
@@ -20,6 +21,13 @@ services:
         max-size: "100m"
         max-file: "50"
         compress: "true"
+  bos_scanner:
+    image: braiinssystems/bos_monitor:v1.0.0
+    container_name: bos_scanner
+    volumes:
+      - ./scan_crontab:/usr/local/share/scan_crontab
+      - scanner_data:/mnt:rw
+    network_mode: "host"
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -27,6 +35,7 @@ services:
     volumes:
       - ./monitoring/prometheus:/etc/prometheus
       - prometheus_data:/prometheus
+      - scanner_data:/mnt
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -73,10 +82,7 @@ services:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_USERS_ALLOW_SIGN_UP=true
-      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/default_dashboards/client_dashboard.json
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/default_dashboards/farm-proxy/client_dashboard.json
     restart: unless-stopped
     logging:
       driver: "json-file"
