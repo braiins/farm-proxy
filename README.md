@@ -8,6 +8,10 @@ Please, keep in mind that the License automatically renews every month and from 
 
 If you have any other questions, please contact us at info@braiins.com.
 
+# Changelog
+
+Changelog can be found on the Github release page [here](https://github.com/braiins/farm-proxy/releases).
+
 # Installation manual
 
 ## Prerequisites

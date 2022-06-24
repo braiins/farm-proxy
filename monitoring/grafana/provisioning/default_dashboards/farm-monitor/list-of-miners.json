@@ -195,7 +195,7 @@
                   {
                     "targetBlank": true,
                     "title": "Go to miner",
-                    "url": "http://${__data.fields.Instance}"
+                    "url": "http://${__data.fields.Miner}"
                   }
                 ]
               }

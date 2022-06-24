@@ -5,7 +5,7 @@ volumes:
   scanner_data: {}
 services:
   farm-proxy:
-    image: braiinssystems/farm-proxy:v1.0.0-rc9
+    image: braiinssystems/farm-proxy:v1.0.0-rc10
     container_name: farm-proxy
     network_mode: "host"
     volumes:
@@ -22,7 +22,7 @@ services:
         max-file: "50"
         compress: "true"
   bos_scanner:
-    image: braiinssystems/bos_monitor:v1.0.0
+    image: braiinssystems/bos_monitor:v1.0.1
     container_name: bos_scanner
     volumes:
       - ./scan_crontab:/usr/local/share/scan_crontab
