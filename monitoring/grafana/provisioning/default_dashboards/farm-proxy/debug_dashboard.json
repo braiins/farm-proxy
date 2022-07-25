@@ -1526,6 +1526,87 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 62
+      },
+      "id": 60,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prom1"
+          },
+          "exemplar": true,
+          "expr": "sum(FP_target_down_reason_total) by (reason, target)",
+          "interval": "",
+          "legendFormat": "{{target}} {{reason}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Reason for Target Down",
+      "type": "timeseries"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "thresholds"
           },
           "mappings": [
@@ -2002,7 +2083,7 @@
         }
       ],
       "title": "Providerds to remove",
-      "type": "gauge"
+      "type": "stat"
     },
     {
       "fieldConfig": {
@@ -2165,7 +2246,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(increase(FP_job_queue_size[10m]))",
+          "expr": "FP_job_queue_size",
           "interval": "",
           "legendFormat": "",
           "refId": "A"

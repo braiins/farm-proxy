@@ -21,16 +21,12 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
-  "iteration": 1648580622883,
+  "id": 4,
+  "iteration": 1658386639859,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -166,7 +162,7 @@
             "properties": [
               {
                 "id": "custom.hidden",
-                "value": false
+                "value": true
               }
             ]
           },
@@ -174,30 +170,6 @@
             "matcher": {
               "id": "byName",
               "options": "Field"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "socket"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "type"
             },
             "properties": [
               {
@@ -230,17 +202,17 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "miner_power{type=\"limit\"} == $power_limit",
+          "expr": "miner_metadata{os_version=\"$os_version\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Power Limit",
+      "title": "OS Version",
       "transformations": [
         {
           "id": "reduce",
@@ -264,40 +236,25 @@
       {
         "current": {
           "selected": false,
-          "text": "1531",
-          "value": "1531"
+          "text": "2022-04-05-0-ddf6a75b-22.04-plus-nightly",
+          "value": "2022-04-05-0-ddf6a75b-22.04-plus-nightly"
         },
-        "hide": 0,
-        "label": "Power Limit",
-        "name": "power_limit",
-        "options": [
-          {
-            "selected": false,
-            "text": "3250",
-            "value": "3250"
-          }
-        ],
-        "query": "1531",
-        "skipUrlSync": false,
-        "type": "textbox"
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
-        },
+        "definition": "label_values(os_version)",
         "hide": 0,
         "includeAll": false,
-        "label": "Data Source",
+        "label": "OS Version",
         "multi": false,
-        "name": "data_source",
+        "name": "os_version",
         "options": [],
-        "query": "prometheus",
+        "query": {
+          "query": "label_values(os_version)",
+          "refId": "StandardVariableQuery"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "type": "datasource"
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
@@ -307,8 +264,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Drill-Down (Power Limit --> Instance)",
-  "uid": "9kaMAdynz",
-  "version": 1,
+  "title": "Drill-Down (OS Version --> Instance)",
+  "uid": "uZT-Tds7z",
+  "version": 4,
   "weekStart": ""
 }

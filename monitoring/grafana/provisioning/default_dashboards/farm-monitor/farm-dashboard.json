@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "iteration": 1649095731441,
+  "id": 6,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -39,16 +39,19 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "List of Miners",
+              "url": "d/R1-4NFs7k/list-of-miners?$${queryparam}"
+            }
+          ],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -76,19 +79,13 @@
         ]
       },
       "gridPos": {
-        "h": 4,
+        "h": 6,
         "w": 6,
         "x": 0,
         "y": 1
       },
       "id": 84,
-      "links": [
-        {
-          "targetBlank": true,
-          "title": "List of Miners",
-          "url": "d/R1-4NFs7k/list-of-miners?${data_source:queryparam}"
-        }
-      ],
+      "links": [],
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -112,10 +109,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "count(up{job!=\"prometheus\"})",
+          "expr": "count(up{job=\"braiinsos-data\"})",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -125,7 +122,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "sum(hashboard_nominal_hashrate_gigahashes_per_second)",
@@ -138,7 +135,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "sum (rate(hashboard_shares[20s])) * 2^32 / 1e9",
@@ -153,10 +150,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Summary of high-level status of individual miners.",
       "fieldConfig": {
         "defaults": {
@@ -167,7 +160,7 @@
             {
               "targetBlank": true,
               "title": "",
-              "url": "d/zLpA9dsnk/drill-down-not-mining-instance?${data_source:queryparam}"
+              "url": "d/zLpA9dsnk/drill-down-not-mining-instance?"
             }
           ],
           "mappings": [],
@@ -184,7 +177,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 12,
         "x": 6,
         "y": 1
@@ -209,10 +202,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "count(up{job!=\"prometheus\"})",
+          "expr": "count(up{job=\"braiinsos-data\"})",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -222,10 +215,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "count(up{job!=\"prometheus\"} == 1)",
+          "expr": "count(up{job=\"braiinsos-data\"} == 1)",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -235,7 +228,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "count(sum by (instance) (rate(hashboard_shares[60s])) > 0)",
@@ -248,10 +241,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "count(max by (instance) (rate(hashboard_shares[60s]) or up{job!=\"prometheus\"} * 0) == 0)",
+          "expr": "count(max by (instance) (rate(hashboard_shares[60s]) or up{job=\"braiinsos-data\"} * 0) == 0)",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -265,14 +258,14 @@
     {
       "description": "",
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 6,
         "x": 18,
         "y": 1
       },
       "id": 126,
       "options": {
-        "content": "<div style=\"text-align:center; display:block; margin-bottom:10px\"><a href=\"https://braiins.com/os/plus?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"  style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-os-plus-logo-reverse-rgb.svg?h=d35e19f3056bef1664b2c5cbde453a44\" height=\"23px\"></a></div>\n<div style=\"text-align:center; display:block; margin-bottom:10px\"><a href=\"https://slushpool.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/slushpool-logo-reverse-rgb.svg?h=6e9e1089b4b55194f400c37f6482f7e7\" height=\"25px\"></a></div>\n<div style=\"text-align:center; display:block; margin-bottom:10px\"><a href=\"https://braiins.com/farm-proxy/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/farm-proxy-logo-white-rgb.svg?h=3e5188e1d46f58ccb0b910c6f8184b9b\" height=\"27px\"></a></div>\n<div style=\"text-align:center; display:block; margin-bottom:10px\"><a href=\"https://insights.braiins.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-mining-insights-logo-on-dark-background-rgb.svg?h=01d2b660acfa395728940a28b9bf64ce\" height=\"17px\"></a></div>\n<div style=\"text-align:center; display:block; margin-bottom:10px\"><a href=\"https://stratumprotocol.org/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/stratum-v2-logo-reverse-rgb.svg?h=77e94750d6f57e33cf70c51e07e5aac5\" height=\"14px\"></a></div>",
+        "content": "<table width=\"100%\" style:\" border: none !important; table-layout: fixed; \" id=\"bps-table\">\n<tr>\n<td style=\"text-align: center; padding: 16px 0; width:50%;\"><a href=\"https://braiins.com/os/plus?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-os-plus-logo-reverse-rgb.svg?h=d35e19f3056bef1664b2c5cbde453a44\" height=\"25px\" align=\"center\"></a></td>\n<td style=\"text-align: center; padding: 16px 0; width:50%;\"><a href=\"https://slushpool.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"><img src=\"https://design.braiins.com/assets/img/logos/slushpool-logo-reverse-rgb.svg?h=6e9e1089b4b55194f400c37f6482f7e7\" height=\"25px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 16px 0;\"><a href=\"https://stratumprotocol.org/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/stratum-v2-logo-reverse-rgb.svg?h=77e94750d6f57e33cf70c51e07e5aac5\" height=\"14px\"></a></td>\n<td style=\"text-align: center; padding: 16px 0;\"><a href=\"https://insights.braiins.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-insights-logo-on-dark-background-rgb.svg?h=aad9d059abab45e38f162e05c1fa322f\" height=\"17px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 16px 0;\" colspan=\"2\"><a href=\"https://braiins.com/farm-proxy/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/farm-proxy-logo-white-rgb.svg?h=3e5188e1d46f58ccb0b910c6f8184b9b\" height=\"30px\"></a></td>\n</tr>\n</table>",
         "mode": "html"
       },
       "pluginVersion": "8.4.0",
@@ -280,74 +273,6 @@
       "type": "text"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
-      "description": "Current real hashrate based on shares from last 10 seconds.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#6b50ff",
-                "value": null
-              }
-            ]
-          },
-          "unit": "Hs"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 0,
-        "y": 5
-      },
-      "id": 40,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${data_source}"
-          },
-          "exemplar": true,
-          "expr": "sum(rate(hashboard_shares[10s])) * 2^32",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Total HR",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -371,10 +296,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 6,
         "x": 6,
-        "y": 5
+        "y": 6
       },
       "id": 43,
       "options": {
@@ -396,7 +321,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "avg(fan_speed_control)",
@@ -410,10 +335,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Average temperature from max temperatures on miner (chip sensor measure or estimate)",
       "fieldConfig": {
         "defaults": {
@@ -435,10 +356,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 6,
         "x": 12,
-        "y": 5
+        "y": 6
       },
       "id": 53,
       "options": {
@@ -460,7 +381,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "avg by (location) (max by(location, instance) (temperature{location=\"chip\"}))",
@@ -473,10 +394,66 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
+      "description": "Current real hashrate based on shares from last 10 seconds.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#6b50ff",
+                "value": null
+              }
+            ]
+          },
+          "unit": "Hs"
+        },
+        "overrides": []
       },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 7
+      },
+      "id": 40,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(hashboard_shares[10s])) * 2^32",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Total HR",
+      "type": "stat"
+    },
+    {
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -501,7 +478,7 @@
         "h": 4,
         "w": 6,
         "x": 18,
-        "y": 6
+        "y": 7
       },
       "id": 75,
       "options": {
@@ -523,7 +500,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "sum(miner_power{type=\"limit\"})",
@@ -536,101 +513,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
-      "description": "Status of individual defined pool connections",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "Show Instances",
-              "url": "d/HL10OOs7z/drill-down-dead-pool-instance?${data_source:queryparam}&var-host=${__series.name}"
-            }
-          ],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 9,
-        "x": 0,
-        "y": 9
-      },
-      "id": 117,
-      "options": {
-        "displayMode": "gradient",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${data_source}"
-          },
-          "exemplar": false,
-          "expr": "sort_desc((count_values('x',client_status{connection_type=\"user\"} < 0) by (host))) # ",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{host}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Client Status - Dead Pools",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "S1",
-            "renamePattern": "Act"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "S-1",
-            "renamePattern": "Dead"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "S0",
-            "renamePattern": "Alive"
-          }
-        }
-      ],
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Status of individual defined pool connections",
       "fieldConfig": {
         "defaults": {
@@ -661,7 +543,7 @@
         "h": 8,
         "w": 9,
         "x": 9,
-        "y": 9
+        "y": 11
       },
       "id": 120,
       "options": {
@@ -681,7 +563,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "sort_desc((count_values('x',client_status{connection_type=\"user\"} > 0) by (host)))",
@@ -718,10 +600,6 @@
       "type": "bargauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -746,7 +624,7 @@
         "h": 4,
         "w": 6,
         "x": 18,
-        "y": 10
+        "y": 11
       },
       "id": 52,
       "options": {
@@ -768,7 +646,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "sum(miner_power{type=\"estimated\"})",
@@ -781,10 +659,93 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
+      "description": "Status of individual defined pool connections",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "Show Instances",
+              "url": "d/HL10OOs7z/drill-down-dead-pool-instance?${data_source:queryparam}&var-host=${__series.name}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
       },
+      "gridPos": {
+        "h": 8,
+        "w": 9,
+        "x": 0,
+        "y": 12
+      },
+      "id": 117,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sort_desc((count_values('x',client_status{connection_type=\"user\"} < 0) by (host))) # ",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{host}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Client Status - Dead Pools",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "S1",
+            "renamePattern": "Act"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "S-1",
+            "renamePattern": "Dead"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "S0",
+            "renamePattern": "Alive"
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -814,7 +775,7 @@
         "h": 4,
         "w": 6,
         "x": 18,
-        "y": 14
+        "y": 15
       },
       "id": 81,
       "options": {
@@ -840,7 +801,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "count_values (\"Stage\", max by (instance) (tuner_stage))\n\n#max by (instance) (tuner_stage)\n",
@@ -891,87 +852,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 0,
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "",
-              "url": "http://${__field.labels.instance}"
-            }
-          ],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "celsius"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 9,
-        "x": 0,
-        "y": 17
-      },
-      "id": 119,
-      "links": [],
-      "options": {
-        "displayMode": "gradient",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "text": {
-          "valueSize": 14
-        }
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${data_source}"
-          },
-          "exemplar": false,
-          "expr": "topk(10,sort_desc(max by(building, instance) (temperature)))",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{building}}, {{instance}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Temperature Top 10 Instances",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "20  seconds MCR is calculated and miners with lowest result are shown. Links are on IP address.",
       "fieldConfig": {
         "defaults": {
@@ -1012,7 +892,7 @@
         "h": 10,
         "w": 9,
         "x": 9,
-        "y": 17
+        "y": 19
       },
       "id": 121,
       "options": {
@@ -1035,7 +915,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "bottomk(10, \n    sort(\n        sum by (building, instance) (rate(hashboard_shares[20s])) * 2^32\n        /\n        sum by(building, instance) (hashboard_nominal_hashrate_gigahashes_per_second * 1e9)\n    )\n)",
@@ -1049,10 +929,6 @@
       "type": "bargauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1082,7 +958,7 @@
         "h": 4,
         "w": 6,
         "x": 18,
-        "y": 18
+        "y": 19
       },
       "id": 124,
       "links": [],
@@ -1106,7 +982,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "count(count by(instance) (rate(hashboard_shares{type=\"valid\"}[20s]) > 0) <3)",
@@ -1119,6 +995,79 @@
       "title": "Less Than 3 HBs",
       "transformations": [],
       "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "http://${__field.labels.instance}"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 9,
+        "x": 0,
+        "y": 20
+      },
+      "id": 119,
+      "links": [],
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {
+          "valueSize": 14
+        }
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "topk(10,sort_desc(max by(building, instance) (temperature)))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{building}}, {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Temperature Top 10 Instances",
+      "type": "bargauge"
     },
     {
       "fieldConfig": {
@@ -1200,7 +1149,7 @@
         "h": 6,
         "w": 6,
         "x": 18,
-        "y": 22
+        "y": 23
       },
       "id": 129,
       "options": {
@@ -1219,7 +1168,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "count(miner_metadata) by(site_id, subnet_id)",
@@ -1261,7 +1210,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 30
       },
       "id": 107,
       "panels": [],
@@ -1269,10 +1218,6 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Real and Nominal Hashrate",
       "fieldConfig": {
         "defaults": {
@@ -1325,7 +1270,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 29
+        "y": 31
       },
       "id": 108,
       "options": {
@@ -1344,7 +1289,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "sum by(type) (rate(hashboard_shares[10s])) * 2^32",
@@ -1356,7 +1301,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "sum(hashboard_nominal_hashrate_gigahashes_per_second) * 1e9",
@@ -1370,10 +1315,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Number of miners sending data.",
       "fieldConfig": {
         "defaults": {
@@ -1430,7 +1371,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 29
+        "y": 31
       },
       "id": 113,
       "options": {
@@ -1449,7 +1390,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "count(count by (instance) (miner_metadata))",
@@ -1463,10 +1404,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Maximum temperature is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated.",
       "fieldConfig": {
         "defaults": {
@@ -1569,7 +1506,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 29
+        "y": 31
       },
       "id": 109,
       "options": {
@@ -1588,7 +1525,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "avg(max by (instance) (temperature))",
@@ -1600,7 +1537,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "max(max by (instance) (temperature))",
@@ -1612,7 +1549,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "min(max by (instance) (temperature))",
@@ -1626,10 +1563,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Estimated power consumption in Watts and power limit.",
       "fieldConfig": {
         "defaults": {
@@ -1702,7 +1635,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 36
+        "y": 38
       },
       "id": 112,
       "options": {
@@ -1721,7 +1654,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "sum(miner_power{type=\"estimated\"})",
@@ -1733,7 +1666,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "sum(miner_power{type=\"limit\"})",
@@ -1747,10 +1680,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Maximum temperature is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated.",
       "fieldConfig": {
         "defaults": {
@@ -1898,7 +1827,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 36
+        "y": 38
       },
       "id": 111,
       "options": {
@@ -1917,7 +1846,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "avg(max by (instance) (fan_speed_control))",
@@ -1929,7 +1858,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "max(max by (instance) (fan_speed_control))",
@@ -1941,7 +1870,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "min(max by (instance) (fan_speed_control))",
@@ -1955,10 +1884,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Power limit is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated.",
       "fieldConfig": {
         "defaults": {
@@ -2061,7 +1986,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 36
+        "y": 38
       },
       "id": 110,
       "options": {
@@ -2080,7 +2005,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "avg(max by (instance) (miner_power{type=\"limit\"}))",
@@ -2092,7 +2017,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "max(max by (instance) (miner_power{type=\"limit\"}))",
@@ -2104,7 +2029,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "min(max by (instance) (miner_power{type=\"limit\"}))",
@@ -2118,10 +2043,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Number of instances that are scraped successfully (Up) or not (Down).",
       "fieldConfig": {
         "defaults": {
@@ -2177,7 +2098,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 43
+        "y": 45
       },
       "id": 115,
       "options": {
@@ -2195,7 +2116,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "count_values(\"Status\",up{job!=\"prometheus\"})",
@@ -2224,10 +2145,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Tuner Status - in case of per-hashboard tuning, maximum status is used.",
       "fieldConfig": {
         "defaults": {
@@ -2284,7 +2201,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 43
+        "y": 45
       },
       "id": 116,
       "options": {
@@ -2302,7 +2219,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "count_values(\"TunerStatus\", max by(instance) (tuner_stage))",
@@ -2352,10 +2269,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Dead Pools",
       "fieldConfig": {
         "defaults": {
@@ -2412,7 +2325,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 43
+        "y": 45
       },
       "id": 127,
       "options": {
@@ -2430,7 +2343,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "count_values(\"Status\", client_status < 0) by(host)",
@@ -2449,7 +2362,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 51
+        "y": 53
       },
       "id": 79,
       "panels": [],
@@ -2457,10 +2370,6 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2507,7 +2416,7 @@
         "h": 14,
         "w": 5,
         "x": 0,
-        "y": 52
+        "y": 54
       },
       "id": 101,
       "options": {
@@ -2529,7 +2438,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "count by (model)(miner_metadata)",
@@ -2544,10 +2453,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "Power Limit of Miners",
       "fieldConfig": {
         "defaults": {
@@ -2558,7 +2463,7 @@
             {
               "targetBlank": true,
               "title": "",
-              "url": "d/9kaMAdynz/drill-down-power-limit-instance?var-power_limit=${__series.name}&${data_source:queryparam}"
+              "url": "d/9kaMAdynz/drill-down-power-limit-instance?var-power_limit=${__series.name}&${queryparam}"
             }
           ],
           "mappings": [],
@@ -2578,7 +2483,7 @@
         "h": 14,
         "w": 3,
         "x": 5,
-        "y": 52
+        "y": 54
       },
       "id": 90,
       "options": {
@@ -2604,7 +2509,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "count_values (\"PowerLimit\", max by (instance) (miner_power{type=\"limit\"}))",
@@ -2617,10 +2522,6 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2650,7 +2551,7 @@
         "h": 7,
         "w": 6,
         "x": 8,
-        "y": 52
+        "y": 54
       },
       "id": 105,
       "options": {
@@ -2676,7 +2577,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
           "expr": "count by (os_version) (miner_metadata)",
@@ -2694,27 +2595,7 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": [
-      {
-        "current": {
-          "selected": false,
-          "text": "default",
-          "value": "default"
-        },
-        "hide": 0,
-        "includeAll": false,
-        "label": "Data Source",
-        "multi": false,
-        "name": "data_source",
-        "options": [],
-        "query": "prometheus",
-        "queryValue": "",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "type": "datasource"
-      }
-    ]
+    "list": []
   },
   "time": {
     "from": "now-6h",
@@ -2724,6 +2605,6 @@
   "timezone": "",
   "title": "Farm Dashboard",
   "uid": "heklhjxnz",
-  "version": 3,
+  "version": 2,
   "weekStart": ""
 }

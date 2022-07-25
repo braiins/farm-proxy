@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": 7,
-  "iteration": 1648572734064,
+  "iteration": 1658390037346,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -106,7 +106,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -194,7 +194,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -263,7 +263,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -330,7 +330,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -393,7 +393,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -457,7 +457,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -521,7 +521,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -586,7 +586,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -642,7 +642,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 34,
+  "schemaVersion": 35,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -650,8 +650,8 @@
       {
         "current": {
           "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
+          "text": "prom1",
+          "value": "prom1"
         },
         "hide": 0,
         "includeAll": false,
@@ -707,6 +707,6 @@
   "timezone": "",
   "title": "Example - Farm Dashboard By Building",
   "uid": "mHaISnsnk",
-  "version": 6,
+  "version": 1,
   "weekStart": ""
 }

@@ -21,16 +21,11 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 12,
-  "iteration": 1648627425367,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -210,7 +205,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "miner_metadata * on (instance) group_left() (count by (instance) (rate(hashboard_shares{type=\"valid\"}[20s]) > 0) < 3) ",
@@ -223,7 +218,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "count by (instance) (rate(hashboard_shares{type=\"valid\"}[20s]) > 0) < 3",
@@ -291,26 +286,7 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": [
-      {
-        "current": {
-          "selected": false,
-          "text": "default",
-          "value": "default"
-        },
-        "hide": 0,
-        "includeAll": false,
-        "label": "Data Source",
-        "multi": false,
-        "name": "data_source",
-        "options": [],
-        "query": "prometheus",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "type": "datasource"
-      }
-    ]
+    "list": []
   },
   "time": {
     "from": "now-15m",
@@ -320,6 +296,6 @@
   "timezone": "",
   "title": "Drill-Down (Less Than 3 HBs --> Instance)",
   "uid": "rkP23dy7z",
-  "version": 1,
+  "version": 3,
   "weekStart": ""
 }

@@ -5,13 +5,13 @@ volumes:
   scanner_data: {}
 services:
   farm-proxy:
-    image: braiinssystems/farm-proxy:v1.0.0-rc11
+    image: braiinssystems/farm-proxy:22.07
     container_name: farm-proxy
     network_mode: "host"
     volumes:
-      - "./config/sample.toml:/conf/farm_proxy.yml"
+      - "./config/sample.toml:/conf/farm_proxy.toml"
     environment:
-      - CONF_PATH=/conf/farm_proxy.yml
+      - CONF_PATH=/conf/farm_proxy.toml
       - RUST_LOG=debug
       - RUST_BACKTRACE=full
     restart: unless-stopped
@@ -52,28 +52,6 @@ services:
         compress: "true"
     labels:
       org.label-schema.group: "monitoring"
-  nodeexporter:
-    image: prom/node-exporter:latest
-    container_name: nodeexporter
-    network_mode: "host"
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.rootfs=/rootfs'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-    restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
-        compress: "true"
-    labels:
-      org.label-schema.group: "monitoring"
   grafana:
     image: grafana/grafana:8.4.0
     container_name: grafana
@@ -82,6 +60,7 @@ services:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
     environment:
+      - GF_PATHS_CONFIG=/etc/grafana/provisioning/grafana.ini
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/default_dashboards/farm-proxy/client_dashboard.json
     restart: unless-stopped
     logging:

@@ -21,16 +21,12 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1648618709854,
+  "id": 14,
+  "iteration": 1658389970170,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -138,7 +134,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "tuner_stage == $tuner_stage",
@@ -196,8 +192,8 @@
       {
         "current": {
           "selected": false,
-          "text": "5",
-          "value": "5"
+          "text": "4",
+          "value": "4"
         },
         "hide": 0,
         "includeAll": false,
@@ -221,12 +217,12 @@
             "value": "3"
           },
           {
-            "selected": false,
+            "selected": true,
             "text": "4",
             "value": "4"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "5",
             "value": "5"
           },
@@ -240,25 +236,6 @@
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
-      },
-      {
-        "current": {
-          "selected": true,
-          "text": "default",
-          "value": "default"
-        },
-        "hide": 0,
-        "includeAll": false,
-        "label": "Data Source",
-        "multi": false,
-        "name": "data_source",
-        "options": [],
-        "query": "prometheus",
-        "queryValue": "",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "type": "datasource"
       }
     ]
   },
@@ -270,6 +247,6 @@
   "timezone": "",
   "title": "Drill-Down (Stage --> Instance)",
   "uid": "9ppW5Oy7z",
-  "version": 2,
+  "version": 4,
   "weekStart": ""
 }

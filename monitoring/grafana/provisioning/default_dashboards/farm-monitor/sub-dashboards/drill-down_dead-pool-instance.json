@@ -21,17 +21,12 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 15,
-  "iteration": 1648623461848,
+  "id": 2,
+  "iteration": 1658386438593,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -39,8 +34,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "displayMode": "auto",
+            "filterable": true
           },
+          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -48,10 +45,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -60,46 +53,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Miner"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 108
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "",
-                    "url": "http://${__series.name}"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Building"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 97
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "Site"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 60
+                "value": 43
               }
             ]
           },
@@ -111,7 +70,19 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 73
+                "value": 71
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Miner"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 107
               }
             ]
           },
@@ -123,7 +94,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 128
+                "value": 108
               }
             ]
           },
@@ -135,19 +106,49 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 114
+                "value": 85
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Time"
+              "options": "Building"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 185
+                "value": 115
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Host"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 190
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Miner"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Go to miner",
+                    "url": "http://${__value.text}"
+                  }
+                ]
               }
             ]
           },
@@ -159,21 +160,15 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 200
+                "value": 209
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byName"
-            },
-            "properties": []
           }
         ]
       },
       "gridPos": {
-        "h": 12,
-        "w": 13,
+        "h": 16,
+        "w": 23,
         "x": 0,
         "y": 0
       },
@@ -194,10 +189,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "client_status{host=\"$host\", connection_type=\"user\"} > 0",
+          "expr": "client_status{host=\"$host\", connection_type=\"user\"} < 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -205,12 +200,14 @@
           "refId": "A"
         }
       ],
-      "title": "Miners with Active Pool",
+      "title": "Instances with Dead Pool",
       "transformations": [
         {
           "id": "organize",
           "options": {
             "excludeByName": {
+              "Field": true,
+              "Last": true,
               "Value": true,
               "__name__": true,
               "client_id": true,
@@ -220,26 +217,26 @@
               "job": true
             },
             "indexByName": {
-              "Time": 13,
-              "Value": 14,
-              "__name__": 4,
-              "building": 0,
-              "client_id": 5,
-              "connection_type": 6,
-              "host": 7,
-              "host_id": 8,
-              "instance": 3,
-              "job": 9,
-              "protocol": 10,
-              "site_id": 1,
-              "subnet_id": 2,
-              "user": 11,
-              "worker": 12
+              "Field": 0,
+              "Last": 14,
+              "__name__": 1,
+              "building": 2,
+              "client_id": 3,
+              "connection_type": 4,
+              "host": 9,
+              "host_id": 5,
+              "instance": 8,
+              "job": 10,
+              "protocol": 11,
+              "site_id": 6,
+              "subnet_id": 7,
+              "user": 12,
+              "worker": 13
             },
             "renameByName": {
-              "Time": "Time",
-              "Value": "",
+              "Last": "",
               "building": "Building",
+              "host": "Host",
               "instance": "Miner",
               "protocol": "Protocol",
               "site_id": "Site",
@@ -262,30 +259,8 @@
       {
         "current": {
           "selected": false,
-          "text": "default",
-          "value": "default"
-        },
-        "hide": 0,
-        "includeAll": false,
-        "label": "Data Source",
-        "multi": false,
-        "name": "data_source",
-        "options": [],
-        "query": "prometheus",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "type": "datasource"
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "stratum.slushpool.com",
-          "value": "stratum.slushpool.com"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${data_source}"
+          "text": "10.33.0.73",
+          "value": "10.33.0.73"
         },
         "definition": "label_values(host)",
         "hide": 0,
@@ -312,8 +287,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "New Drill-Down (Active Pool --> Instance]",
-  "uid": "bflmpsvz",
+  "title": "Drill-Down (Dead Pool --> Instance)",
+  "uid": "HL10OOs7z",
   "version": 3,
   "weekStart": ""
 }

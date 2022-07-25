@@ -24,8 +24,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 3,
-  "iteration": 1648651132862,
+  "id": 16,
+  "iteration": 1658749719572,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -48,7 +48,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 1,
+        "h": 2,
         "w": 12,
         "x": 0,
         "y": 0
@@ -98,7 +98,7 @@
       },
       "id": 62,
       "options": {
-        "content": "<div style=\"text-align:center; display:block; margin-bottom:10px\"><a href=\"https://braiins.com/os/plus?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"  style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-os-plus-logo-reverse-rgb.svg?h=d35e19f3056bef1664b2c5cbde453a44\" height=\"23px\"></a></div>\n<div style=\"text-align:center; display:block; margin-bottom:10px\"><a href=\"https://slushpool.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/slushpool-logo-reverse-rgb.svg?h=6e9e1089b4b55194f400c37f6482f7e7\" height=\"25px\"></a></div>\n<div style=\"text-align:center; display:block; margin-bottom:10px\"><a href=\"https://braiins.com/farm-proxy/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/farm-proxy-logo-white-rgb.svg?h=3e5188e1d46f58ccb0b910c6f8184b9b\" height=\"27px\"></a></div>\n<div style=\"text-align:center; display:block; margin-bottom:10px\"><a href=\"https://insights.braiins.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-mining-insights-logo-on-dark-background-rgb.svg?h=01d2b660acfa395728940a28b9bf64ce\" height=\"17px\"></a></div>\n<div style=\"text-align:center; display:block; margin-bottom:10px\"><a href=\"https://stratumprotocol.org/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/stratum-v2-logo-reverse-rgb.svg?h=77e94750d6f57e33cf70c51e07e5aac5\" height=\"14px\"></a></div>",
+        "content": "<table width=\"100%\" style:\" border: none !important; table-layout: fixed; \" id=\"bps-table\">\n<tr>\n<td style=\"text-align: center; padding: 16px 0; width:50%;\"><a href=\"https://braiins.com/os/plus?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-os-plus-logo-reverse-rgb.svg?h=d35e19f3056bef1664b2c5cbde453a44\" height=\"25px\" align=\"center\"></a></td>\n<td style=\"text-align: center; padding: 16px 0; width:50%;\"><a href=\"https://slushpool.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"><img src=\"https://design.braiins.com/assets/img/logos/slushpool-logo-reverse-rgb.svg?h=6e9e1089b4b55194f400c37f6482f7e7\" height=\"25px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 16px 0;\"><a href=\"https://stratumprotocol.org/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/stratum-v2-logo-reverse-rgb.svg?h=77e94750d6f57e33cf70c51e07e5aac5\" height=\"14px\"></a></td>\n<td style=\"text-align: center; padding: 16px 0;\"><a href=\"https://insights.braiins.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-insights-logo-on-dark-background-rgb.svg?h=aad9d059abab45e38f162e05c1fa322f\" height=\"17px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 16px 0;\" colspan=\"2\"><a href=\"https://braiins.com/farm-proxy/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/farm-proxy-logo-white-rgb.svg?h=3e5188e1d46f58ccb0b910c6f8184b9b\" height=\"30px\"></a></td>\n</tr>\n</table>",
         "mode": "markdown"
       },
       "pluginVersion": "8.4.0",
@@ -127,7 +127,7 @@
         "h": 1,
         "w": 12,
         "x": 0,
-        "y": 1
+        "y": 2
       },
       "id": 55,
       "options": {
@@ -173,82 +173,6 @@
           "interval": "",
           "legendFormat": "",
           "refId": "A"
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "description": "Validity of certificate for devfee hashrate aggregation",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 0,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 0
-              },
-              {
-                "color": "#EAB839",
-                "value": 3
-              },
-              {
-                "color": "green",
-                "value": 7
-              }
-            ]
-          },
-          "unit": "day"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 12,
-        "x": 0,
-        "y": 2
-      },
-      "id": 52,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {
-          "titleSize": 14,
-          "valueSize": 14
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": true,
-          "expr": "FP_remaining_certificate_validity_days",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "Certificate valid for:",
-          "refId": "B"
         }
       ],
       "type": "stat"
@@ -955,7 +879,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "100 - (sum(FP_connections_by_target{goal!=\"#!!ii-DevFee\"}) / sum(FP_subscription_size_to_target_total{goal!=\"#!!ii-DevFee\"})) * 100",
+          "expr": "clamp_min(100 - (sum(FP_connections_by_target{goal!=\"#!!ii-DevFee\"}) / sum(FP_subscription_size_to_target_total{goal!=\"#!!ii-DevFee\"})) * 100, 0)",
           "interval": "",
           "legendFormat": "Standard HR",
           "refId": "A"
@@ -966,7 +890,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "100 - (sum(FP_connections_by_target{goal=\"#!!ii-DevFee\"}) / sum(FP_subscription_size_to_target_total{goal=\"#!!ii-DevFee\"})) * 100",
+          "expr": "clamp_min(100 - (sum(FP_connections_by_target{goal=\"#!!ii-DevFee\"}) / sum(FP_subscription_size_to_target_total{goal=\"#!!ii-DevFee\"})) * 100, 0)",
           "hide": false,
           "interval": "",
           "legendFormat": "Devfee HR",
@@ -1051,7 +975,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "100 - (sum(FP_connections_by_target{goal!=\"#!!ii-DevFee\"}) / sum(FP_subscription_size_to_target_total{goal!=\"#!!ii-DevFee\"})) * 100",
+          "expr": "clamp_min(100 - (sum(FP_connections_by_target{goal!=\"#!!ii-DevFee\"}) / sum(FP_subscription_size_to_target_total{goal!=\"#!!ii-DevFee\"})) * 100, 0)",
           "interval": "",
           "legendFormat": "Standard HR",
           "refId": "A"
@@ -1062,7 +986,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "100 - (sum(FP_connections_by_target{goal=\"#!!ii-DevFee\"}) / sum(FP_subscription_size_to_target_total{goal=\"#!!ii-DevFee\"})) * 100",
+          "expr": "clamp_min(100 - (sum(FP_connections_by_target{goal=\"#!!ii-DevFee\"}) / sum(FP_subscription_size_to_target_total{goal=\"#!!ii-DevFee\"})) * 100, 0)",
           "hide": false,
           "interval": "",
           "legendFormat": "Devfee HR",
@@ -1362,7 +1286,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "Client Dashboard",
-  "uid": "9R0uBpynk",
+  "uid": "9UtNFCgVz",
   "version": 1,
   "weekStart": ""
 }

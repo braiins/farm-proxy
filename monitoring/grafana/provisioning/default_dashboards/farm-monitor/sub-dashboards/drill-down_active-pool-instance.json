@@ -21,16 +21,13 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1648580566815,
+  "id": 40,
+  "iteration": 1658392155498,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -40,13 +37,6 @@
             "align": "auto",
             "displayMode": "auto"
           },
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "",
-              "url": "http://${__value.text}"
-            }
-          ],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -66,127 +56,114 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "client_id"
+              "options": "Miner"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
+                "id": "custom.width",
+                "value": 108
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "http://${__series.name}"
+                  }
+                ]
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "__name__"
+              "options": "Building"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
+                "id": "custom.width",
+                "value": 97
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "connection_type"
+              "options": "Site"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
+                "id": "custom.width",
+                "value": 60
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "host"
+              "options": "Subnet"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
+                "id": "custom.width",
+                "value": 73
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "host_id"
+              "options": "Protocol"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
+                "id": "custom.width",
+                "value": 128
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Last"
+              "options": "User"
             },
             "properties": [
               {
-                "id": "custom.hidden"
+                "id": "custom.width",
+                "value": 114
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "site_id"
+              "options": "Time"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
+                "id": "custom.width",
+                "value": 185
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "subnet_id"
+              "options": "Worker"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Field"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
+                "id": "custom.width",
+                "value": 200
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 16,
-        "w": 23,
+        "h": 12,
+        "w": 13,
         "x": 0,
         "y": 0
       },
@@ -199,32 +176,67 @@
           ],
           "show": false
         },
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "miner_metadata{os_version=\"$os_version\"}",
+          "expr": "client_status{host=\"$host\", connection_type=\"user\"} > 0",
+          "format": "table",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "OS Version",
+      "title": "Miners with Active Pool",
       "transformations": [
         {
-          "id": "reduce",
+          "id": "organize",
           "options": {
-            "labelsToFields": true,
-            "reducers": [
-              "last"
-            ]
+            "excludeByName": {
+              "Value": true,
+              "__name__": true,
+              "client_id": true,
+              "connection_type": true,
+              "host": true,
+              "host_id": true,
+              "job": true
+            },
+            "indexByName": {
+              "Time": 13,
+              "Value": 14,
+              "__name__": 4,
+              "building": 0,
+              "client_id": 5,
+              "connection_type": 6,
+              "host": 7,
+              "host_id": 8,
+              "instance": 3,
+              "job": 9,
+              "protocol": 10,
+              "site_id": 1,
+              "subnet_id": 2,
+              "user": 11,
+              "worker": 12
+            },
+            "renameByName": {
+              "Time": "Time",
+              "Value": "",
+              "building": "Building",
+              "instance": "Miner",
+              "protocol": "Protocol",
+              "site_id": "Site",
+              "subnet_id": "Subnet",
+              "user": "User",
+              "worker": "Worker"
+            }
           }
         }
       ],
@@ -240,18 +252,18 @@
       {
         "current": {
           "selected": false,
-          "text": "2022-03-23-0-803bb9af-22.03-plus-nightly",
-          "value": "2022-03-23-0-803bb9af-22.03-plus-nightly"
+          "text": "eu.stratum.slushpool.com",
+          "value": "eu.stratum.slushpool.com"
         },
-        "definition": "label_values(os_version)",
+        "definition": "label_values(host)",
         "hide": 0,
         "includeAll": false,
-        "label": "OS Version",
+        "label": "Host",
         "multi": false,
-        "name": "os_version",
+        "name": "host",
         "options": [],
         "query": {
-          "query": "label_values(os_version)",
+          "query": "label_values(host)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -259,24 +271,6 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
-        },
-        "hide": 0,
-        "includeAll": false,
-        "label": "Data Source",
-        "multi": false,
-        "name": "data_source",
-        "options": [],
-        "query": "prometheus",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "type": "datasource"
       }
     ]
   },
@@ -286,8 +280,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Drill-Down (OS Version --> Instance)",
-  "uid": "uZT-Tds7z",
-  "version": 1,
+  "title": "Drill-Down (Active Pool --> Instance)",
+  "uid": "bflmpsvz",
+  "version": 2,
   "weekStart": ""
 }

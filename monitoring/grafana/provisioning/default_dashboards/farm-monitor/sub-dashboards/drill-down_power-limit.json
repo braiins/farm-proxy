@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 10,
-  "iteration": 1648627484363,
+  "id": 13,
+  "iteration": 1658389922396,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -38,10 +38,15 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto",
-            "filterable": true
+            "displayMode": "auto"
           },
-          "links": [],
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "http://${__value.text}"
+            }
+          ],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -49,6 +54,10 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           }
@@ -57,114 +66,143 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Site"
+              "options": "client_id"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 43
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Subnet"
+              "options": "__name__"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 71
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Miner"
+              "options": "connection_type"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 107
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Protocol"
+              "options": "host"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 108
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "User"
+              "options": "host_id"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 85
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Building"
+              "options": "Last"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 115
+                "id": "custom.hidden"
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Host"
+              "options": "site_id"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 190
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Miner"
+              "options": "subnet_id"
             },
             "properties": [
               {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "Go to miner",
-                    "url": "http://${__value.text}"
-                  }
-                ]
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Worker"
+              "options": "Last"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 209
+                "id": "custom.hidden",
+                "value": false
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Field"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "socket"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "type"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           }
@@ -185,8 +223,7 @@
           ],
           "show": false
         },
-        "showHeader": true,
-        "sortBy": []
+        "showHeader": true
       },
       "pluginVersion": "8.4.0",
       "targets": [
@@ -196,58 +233,22 @@
             "uid": "${data_source}"
           },
           "exemplar": false,
-          "expr": "client_status{host=\"$host\", connection_type=\"user\"} < 0",
-          "format": "table",
+          "expr": "miner_power{type=\"limit\"} == $power_limit",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Instances with Dead Pool",
+      "title": "Power Limit",
       "transformations": [
         {
-          "id": "organize",
+          "id": "reduce",
           "options": {
-            "excludeByName": {
-              "Field": true,
-              "Last": true,
-              "Value": true,
-              "__name__": true,
-              "client_id": true,
-              "connection_type": true,
-              "host": true,
-              "host_id": true,
-              "job": true
-            },
-            "indexByName": {
-              "Field": 0,
-              "Last": 14,
-              "__name__": 1,
-              "building": 2,
-              "client_id": 3,
-              "connection_type": 4,
-              "host": 9,
-              "host_id": 5,
-              "instance": 8,
-              "job": 10,
-              "protocol": 11,
-              "site_id": 6,
-              "subnet_id": 7,
-              "user": 12,
-              "worker": 13
-            },
-            "renameByName": {
-              "Last": "",
-              "building": "Building",
-              "host": "Host",
-              "instance": "Miner",
-              "protocol": "Protocol",
-              "site_id": "Site",
-              "subnet_id": "Subnet",
-              "user": "User",
-              "worker": "Worker"
-            }
+            "labelsToFields": true,
+            "reducers": [
+              "last"
+            ]
           }
         }
       ],
@@ -263,31 +264,28 @@
       {
         "current": {
           "selected": false,
-          "text": "malina-karel.mr0.ii.zone",
-          "value": "malina-karel.mr0.ii.zone"
+          "text": "1531",
+          "value": "1531"
         },
-        "definition": "label_values(host)",
         "hide": 0,
-        "includeAll": false,
-        "label": "Host",
-        "multi": false,
-        "name": "host",
-        "options": [],
-        "query": {
-          "query": "label_values(host)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
+        "label": "Power Limit",
+        "name": "power_limit",
+        "options": [
+          {
+            "selected": true,
+            "text": "3250",
+            "value": "3250"
+          }
+        ],
+        "query": "1531",
         "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
+        "type": "textbox"
       },
       {
         "current": {
           "selected": false,
-          "text": "default",
-          "value": "default"
+          "text": "prom1",
+          "value": "prom1"
         },
         "hide": 0,
         "includeAll": false,
@@ -309,8 +307,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Drill-Down (Dead Pool --> Instance)",
-  "uid": "HL10OOs7z",
-  "version": 4,
+  "title": "Drill-Down (Power Limit --> Instance)",
+  "uid": "9kaMAdynz",
+  "version": 1,
   "weekStart": ""
 }
