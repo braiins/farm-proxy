@@ -5,7 +5,7 @@ volumes:
   scanner_data: {}
 services:
   farm-proxy:
-    image: braiinssystems/farm-proxy:22.07
+    image: braiinssystems/farm-proxy:22.07.1
     container_name: farm-proxy
     network_mode: "host"
     volumes:

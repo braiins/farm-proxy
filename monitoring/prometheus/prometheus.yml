@@ -32,11 +32,11 @@ scrape_configs:
       # Add file name as a label
       - source_labels: ["__meta_filepath"]
         regex: "\\/mnt\\/miners_(.+?)\\.json.*"
-        target_label: "building"          
+        target_label: "building"
       # Get rid of port in address
       - source_labels: ["__address__"]
         regex: "^(.+?):.*"
-        target_label: "instance"  
+        target_label: "instance"
       ###################################################################################
       # The following is optional. Useful if you manage your farm by using
       # subnets.
