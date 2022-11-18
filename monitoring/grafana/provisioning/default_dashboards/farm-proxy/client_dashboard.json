@@ -430,7 +430,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(FP_shares_total{direction=\"downstream\", status=\"accepted\", type=\"$type\"})",
+          "expr": "sum(FP_shares_total{direction=\"downstream\", status=\"accepted\", type=~\"$type\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "Accepted",
@@ -442,7 +442,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(FP_shares_total{direction=\"downstream\", status!=\"accepted\", type=\"$type\"})",
+          "expr": "sum(FP_shares_total{direction=\"downstream\", status!=\"accepted\", type=~\"$type\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "Invalid",
@@ -454,7 +454,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(FP_shares_total{direction=\"downstream\", status!=\"accepted\", type=\"$type\"}) / sum(FP_shares_total{direction=\"downstream\", type=\"$type\"}) * 100",
+          "expr": "sum(FP_shares_total{direction=\"downstream\", status!=\"accepted\", type=~\"$type\"}) / sum(FP_shares_total{direction=\"downstream\", type=~\"$type\"}) * 100",
           "hide": false,
           "interval": "",
           "legendFormat": "Invalid ratio",
@@ -549,7 +549,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(FP_shares_total{direction=\"upstream\", status=\"validated\",type=\"$type\"})",
+          "expr": "sum(FP_shares_total{direction=\"upstream\", status=\"validated\",type=~\"$type\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "Accepted",
@@ -561,7 +561,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(FP_shares_total{direction=\"upstream\", status!=\"validated\",type=\"$type\"})",
+          "expr": "sum(FP_shares_total{direction=\"upstream\", status!=\"validated\",type=~\"$type\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "Invalid",
@@ -573,7 +573,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(FP_shares_total{direction=\"upstream\", status!=\"validated\",type=\"$type\"}) / sum(FP_shares_total{direction=\"upstream\", type=\"$type\"}) * 100",
+          "expr": "sum(FP_shares_total{direction=\"upstream\", status!=\"validated\",type=~\"$type\"}) / sum(FP_shares_total{direction=\"upstream\", type=~\"$type\"}) * 100",
           "hide": false,
           "interval": "",
           "legendFormat": "Invalid ratio",

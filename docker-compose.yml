@@ -5,7 +5,7 @@ volumes:
   scanner_data: {}
 services:
   farm-proxy:
-    image: braiinssystems/farm-proxy:22.09
+    image: braiinssystems/farm-proxy:22.11 # Will be replaced with braiinssystems/farm-proxy:TAG upon public release
     container_name: farm-proxy
     network_mode: "host"
     volumes:
@@ -21,6 +21,9 @@ services:
         max-size: "100m"
         max-file: "50"
         compress: "true"
+  # boscanner scans the network on port 8081 to find miners with BOS+ for the farm-monitor client_dashboard
+  # more info about farm monitor is provided in official doc https://docs.braiins.com/os/plus-en/Monitoring%20Braiins%20OS%2B%20with%20Prometheus%20and%20Grafana/index_monitoring.html
+  # support for miners with stock FW will be addded soon
   bos_scanner:
     image: braiinssystems/bos_monitor:v1.0.1
     container_name: bos_scanner
@@ -52,6 +55,29 @@ services:
         compress: "true"
     labels:
       org.label-schema.group: "monitoring"
+      # nodeexporter is a container designed to monitor the host system, more info in https://github.com/prometheus/node_exporter
+      # nodeexporter:
+      #   image: prom/node-exporter:latest
+      #   container_name: nodeexporter
+      #   network_mode: "host"
+      #   volumes:
+      #     - /proc:/host/proc:ro
+      #     - /sys:/host/sys:ro
+      #     - /:/rootfs:ro
+      #   command:
+      #     - '--path.procfs=/host/proc'
+      #     - '--path.rootfs=/rootfs'
+      #     - '--path.sysfs=/host/sys'
+      #     - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+      #   restart: unless-stopped
+      #   logging:
+      #     driver: "json-file"
+      #     options:
+      #       max-size: "10m"
+      #       max-file: "5"
+      #       compress: "true"
+      #   labels:
+      #     org.label-schema.group: "monitoring"
   grafana:
     image: grafana/grafana:8.4.0
     container_name: grafana
@@ -60,6 +86,9 @@ services:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
     environment:
+      #- GF_SECURITY_ADMIN_USER=admin
+      #- GF_SECURITY_ADMIN_PASSWORD=admin
+      #- GF_USERS_ALLOW_SIGN_UP=true
       - GF_PATHS_CONFIG=/etc/grafana/provisioning/grafana.ini
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/default_dashboards/farm-proxy/client_dashboard.json
     restart: unless-stopped
