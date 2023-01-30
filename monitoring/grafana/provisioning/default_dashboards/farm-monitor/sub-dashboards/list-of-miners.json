@@ -21,16 +21,11 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 9,
-  "iteration": 1658390085430,
+  "id": 12,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${data_source}"
-      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -70,49 +65,9 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Subnet"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 85
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Site"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 71
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Temperature"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 95
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "Fan Speed"
             },
             "properties": [
-              {
-                "id": "custom.width",
-                "value": 127
-              },
               {
                 "id": "thresholds",
                 "value": {
@@ -140,18 +95,10 @@
               {
                 "id": "custom.displayMode",
                 "value": "color-text"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Hashrate"
-            },
-            "properties": [
+              },
               {
-                "id": "custom.width",
-                "value": 110
+                "id": "noValue",
+                "value": "-"
               }
             ]
           },
@@ -168,6 +115,10 @@
               {
                 "id": "unit",
                 "value": "celsius"
+              },
+              {
+                "id": "noValue",
+                "value": "-"
               }
             ]
           },
@@ -179,7 +130,11 @@
             "properties": [
               {
                 "id": "unit",
-                "value": "THs"
+                "value": "GHs"
+              },
+              {
+                "id": "noValue",
+                "value": "-"
               }
             ]
           },
@@ -198,6 +153,80 @@
                     "url": "http://${__data.fields.Miner}"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Fan RPM"
+            },
+            "properties": [
+              {
+                "id": "noValue",
+                "value": "-"
+              },
+              {
+                "id": "unit",
+                "value": "locale"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Power Limit"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "watt"
+              },
+              {
+                "id": "noValue",
+                "value": "-"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "OS"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "braiinsos-data": {
+                        "index": 0,
+                        "text": "BOS+"
+                      },
+                      "metrics-exporter": {
+                        "index": 1,
+                        "text": "Stock FW"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Efficiency"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "W/THs"
+              },
+              {
+                "id": "noValue",
+                "value": "-"
               }
             ]
           }
@@ -222,7 +251,7 @@
         "sortBy": [
           {
             "desc": true,
-            "displayName": "Temperature"
+            "displayName": "Hashrate"
           }
         ]
       },
@@ -231,10 +260,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "max by(instance) (temperature)",
+          "expr": "max by(instance) (temperature) or max by (instance) (hashboard_temperature{type=\"raw\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -244,10 +273,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "fan_speed_control #* on (instance) group_left(model) (miner_metadata)",
+          "expr": "max by(instance) (fan_speed_control) #* on (instance) group_left(model) (miner_metadata)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -258,21 +287,21 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "sum by (instance) (rate(hashboard_shares[30s])) * 2^32 / 1e12",
+          "expr": "sum by (instance) (rate(hashboard_shares[5m]) * 2^32 / 1e9) or sum by (instance)  (rate(stratum_accepted_shares_counter[5m]) * 2^32 / 1e9) or sum by (instance)  (average_hashrate_last_5_sec_ghs) #or sum by (instance) (up{job=~\"braiinsos-data|metrics-exporter\",instance!=\"localhost\"}*0)",
           "format": "table",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "",
-          "refId": "A"
+          "legendFormat": "{{instance}}",
+          "refId": "Hashrate"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
           "expr": "miner_metadata",
@@ -280,22 +309,50 @@
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "",
-          "refId": "B"
+          "legendFormat": "{{instance}}",
+          "refId": "MinerMetadata"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${data_source}"
+            "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "miner_power{type=\"limit\"}",
+          "expr": "miner_power_target_w{type=\"configured\"} or miner_power{type=\"limit\"}",
           "format": "table",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "",
-          "refId": "C"
+          "legendFormat": "{{instance}}",
+          "refId": "PowerLimit"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "max by(instance) (fan_rpm_feedback)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "FanRPM"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "((((sum by (instance) (miner_power_target_w{type=\"current\",job=\"braiinsos-data\"}) or sum by (instance) (miner_power{type=\"estimated\",job=\"braiinsos-data\"})) / on (instance) group_left() (sum by (instance) (rate(hashboard_shares{job=\"braiinsos-data\"}[5m])) * 2^32 / 1e12)) + on (instance) group_left() (miner_metadata{job=\"braiinsos-data\"})) < 1e12 or\n(((sum by (instance) (miner_power_target_w{type=\"current\",job=\"braiinsos-data\"}) or sum by (instance) (miner_power{type=\"estimated\",job=\"braiinsos-data\"})) / on (instance) group_left() (sum by (instance) (rate(stratum_accepted_shares_counter{job=\"braiinsos-data\"}[5m])) * 2^32 / 1e12)) + on (instance) group_left() (miner_metadata{job=\"braiinsos-data\"})) < 1e12)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "Efficiency"
         }
       ],
       "title": "List of Miners",
@@ -313,21 +370,30 @@
               "Time 1": true,
               "Time 2": true,
               "Time 3": true,
+              "Time 4": true,
               "Time 5": true,
+              "Time 6": true,
+              "Time 7": true,
               "Value #B": true,
+              "Value #MinerMetadata": true,
               "__name__ 1": true,
               "__name__ 2": true,
               "__name__ 3": true,
+              "active": true,
               "building 1": false,
               "building 2": true,
               "building 3": true,
               "device_id": true,
+              "fw": true,
               "host_id 1": true,
               "host_id 2": true,
               "host_id 3": true,
-              "job 1": true,
+              "job 1": false,
               "job 2": true,
               "job 3": true,
+              "label 1": false,
+              "label 2": true,
+              "label 3": true,
               "site_id 2": true,
               "site_id 3": true,
               "socket": true,
@@ -336,51 +402,60 @@
               "type": true
             },
             "indexByName": {
-              "Time 1": 11,
-              "Time 2": 12,
-              "Time 3": 16,
-              "Time 4": 10,
-              "Time 5": 25,
-              "Value #A": 5,
-              "Value #B": 24,
-              "Value #C": 6,
-              "Value #FanSpeed": 7,
-              "Value #Temp": 4,
-              "__name__ 1": 14,
-              "__name__ 2": 17,
-              "__name__ 3": 26,
-              "building 1": 0,
-              "building 2": 18,
-              "building 3": 27,
-              "device_id": 19,
-              "host_id 1": 13,
-              "host_id 2": 20,
-              "host_id 3": 28,
+              "Time 1": 17,
+              "Time 2": 18,
+              "Time 3": 21,
+              "Time 4": 16,
+              "Time 5": 30,
+              "Time 6": 31,
+              "Time 7": 33,
+              "Value #Efficiency": 7,
+              "Value #FanRPM": 11,
+              "Value #FanSpeed": 10,
+              "Value #Hashrate": 6,
+              "Value #MinerMetadata": 29,
+              "Value #PowerLimit": 8,
+              "Value #Temp": 9,
+              "__name__ 1": 20,
+              "__name__ 2": 22,
+              "active": 32,
+              "device_id": 23,
+              "fw": 5,
+              "host_id 1": 19,
+              "host_id 2": 24,
               "instance": 3,
-              "job 1": 15,
-              "job 2": 21,
-              "job 3": 29,
-              "model": 8,
-              "os_version": 9,
+              "job 1": 14,
+              "job 2": 12,
+              "label 1": 0,
+              "label 2": 4,
+              "model": 13,
+              "os_version": 15,
               "site_id 1": 1,
-              "site_id 2": 22,
-              "site_id 3": 30,
-              "socket": 31,
+              "site_id 2": 25,
+              "socket": 27,
               "subnet_id 1": 2,
-              "subnet_id 2": 23,
-              "subnet_id 3": 32,
-              "type": 33
+              "subnet_id 2": 26,
+              "type": 28
             },
             "renameByName": {
               "Time 4": "Time",
               "Value #A": "Hashrate",
               "Value #C": "Power Limit",
+              "Value #Efficiency": "Efficiency",
+              "Value #FanRPM": "Fan RPM",
               "Value #FanSpeed": "Fan Speed",
+              "Value #Hashrate": "Hashrate",
+              "Value #PowerLimit": "Power Limit",
               "Value #Temp": "Temperature",
+              "__name__ 1": "",
               "building 1": "Building",
+              "fw": "",
               "host_id 1": "",
               "instance": "Miner",
-              "job 1": "",
+              "job 1": "OS",
+              "job 2": "Firmware",
+              "label 1": "Building",
+              "label 2": "",
               "model": "Model",
               "os_version": "OS Version",
               "site_id 1": "Site",
@@ -399,26 +474,7 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": [
-      {
-        "current": {
-          "selected": false,
-          "text": "default",
-          "value": "default"
-        },
-        "hide": 0,
-        "includeAll": false,
-        "label": "Data Source",
-        "multi": false,
-        "name": "data_source",
-        "options": [],
-        "query": "prometheus",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "type": "datasource"
-      }
-    ]
+    "list": []
   },
   "time": {
     "from": "now-6h",
@@ -428,6 +484,6 @@
   "timezone": "",
   "title": "List of Miners",
   "uid": "R1-4NFs7k",
-  "version": 2,
+  "version": 4,
   "weekStart": ""
 }

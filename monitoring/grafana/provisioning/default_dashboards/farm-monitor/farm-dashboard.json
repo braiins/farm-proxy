@@ -20,8 +20,9 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 1,
-  "id": 6,
+  "graphTooltip": 0,
+  "id": 13,
+  "iteration": 1669988558738,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -33,32 +34,38 @@
         "x": 0,
         "y": 0
       },
-      "id": 77,
+      "id": 20,
       "panels": [],
-      "title": "Summary",
+      "title": "Overview",
       "type": "row"
     },
     {
-      "description": "",
+      "description": "**Nominal hashrate**: based on manufacturer data \\\n**Real hashrate**: measured hashrate based on 1m average \\\n*Click on the graph to see list of all devices* \\\nnote: nominal hashrate is not available for Antminers S9 with BOS+",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-RdYlGr"
           },
+          "displayName": "${__series.name}",
           "links": [
             {
               "targetBlank": true,
-              "title": "List of Miners",
+              "title": "List of miners",
               "url": "d/R1-4NFs7k/list-of-miners?$${queryparam}"
             }
           ],
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "#6b50ff",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           },
@@ -68,11 +75,148 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Miners"
+              "options": "Nominal HR"
             },
             "properties": [
               {
-                "id": "unit"
+                "id": "displayName"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 9,
+        "x": 0,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "displayMode": "lcd",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sum(hashboard_nominal_hashrate_ghs{job=~\"$OS\",label=~\"$label\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Nominal HR",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sum(\n  sum by (instance) (rate(hashboard_shares{job=~\"$OS\",label=~\"$label\"}[$interval]) * 2^32 / 1e9) or \n  sum by (instance) (rate(stratum_accepted_shares_counter{job=~\"$OS\",label=~\"$label\"}[$interval]) * 2^32 / 1e9) or \n  sum by (instance) (average_hashrate_last_5_sec_ghs{job=~\"$OS\",label=~\"$label\"})\n  )",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Real HR (10s)",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sum(\n  sum by (instance) (rate(hashboard_shares{job=~\"$OS\",label=~\"$label\"}[$interval]) * 2^32 / 1e9) or \n  sum by (instance)  (rate(stratum_accepted_shares_counter{job=~\"$OS\",label=~\"$label\"}[$interval]) * 2^32 / 1e9) or \n  sum by (instance)  (average_hashrate_last_5_sec_ghs{job=~\"$OS\",label=~\"$label\"})\n  )\n/\nsum(hashboard_nominal_hashrate_ghs{job=~\"$OS\",label=~\"$label\"})",
+          "hide": true,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "MCR",
+          "refId": "C"
+        }
+      ],
+      "title": "Hashrate",
+      "type": "bargauge"
+    },
+    {
+      "description": "**Discovered**: No. of discovered devices by the scanning procedure \\\n**Monitored**: No. of devices, which are *up* (~ miner is exposing any metric)\\\n**Mining**: No. of devices, which produced *some* hashrate in the last 5 minutes\\\n**Not Mining**: No. of devices, which produced *no* hashrate in the last 5 minutes \\\n**Offline**: No. of devices, which are *down* (~ miner is **not** exposing any metric)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "List of not mining devices",
+              "url": "d/zLpA9dsnk/drill-down-not-mining-instance?${OS:queryparam}﻿&﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿${label:queryparam}"
+            },
+            {
+              "targetBlank": true,
+              "title": "List of offline devices",
+              "url": "d/GwQo-6S4k/drill-down-offline-instance?${OS:queryparam}﻿&﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿${label:queryparam}"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Not Mining"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Offline"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
               }
             ]
           }
@@ -80,112 +224,14 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 6,
-        "x": 0,
+        "w": 7,
+        "x": 9,
         "y": 1
       },
-      "id": 84,
-      "links": [],
+      "id": 2,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {
-          "titleSize": 14,
-          "valueSize": 14
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": false,
-          "expr": "count(up{job=\"braiinsos-data\"})",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "Miners",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": false,
-          "expr": "sum(hashboard_nominal_hashrate_gigahashes_per_second)",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": " Nominal HR",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": false,
-          "expr": "sum (rate(hashboard_shares[20s])) * 2^32 / 1e9",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "Real HR (10s)",
-          "refId": "C"
-        }
-      ],
-      "title": "Summary",
-      "type": "stat"
-    },
-    {
-      "description": "Summary of high-level status of individual miners.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "",
-              "url": "d/zLpA9dsnk/drill-down-not-mining-instance?"
-            }
-          ],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#6b50ff",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 12,
-        "x": 6,
-        "y": 1
-      },
-      "id": 123,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -195,7 +241,7 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "value_and_name"
       },
       "pluginVersion": "8.4.0",
       "targets": [
@@ -205,12 +251,11 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "count(up{job=\"braiinsos-data\"})",
-          "hide": false,
+          "expr": "count(up{job=~\"$OS\",label=~\"$label\",instance!=\"localhost:8081\"}) or vector(0)",
           "instant": true,
           "interval": "",
-          "legendFormat": "Defined Miners",
-          "refId": "Defined"
+          "legendFormat": "Discovered",
+          "refId": "A"
         },
         {
           "datasource": {
@@ -218,12 +263,13 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "count(up{job=\"braiinsos-data\"} == 1)",
+          "expr": "count(up{job=~ \"$OS\",label=~\"$label\",instance!=\"localhost:8081\"} == 1) or vector(0)",
+          "format": "time_series",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "Responsive Miners",
-          "refId": "Up"
+          "legendFormat": "Monitored",
+          "refId": "B"
         },
         {
           "datasource": {
@@ -231,12 +277,12 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "count(sum by (instance) (rate(hashboard_shares[60s])) > 0)",
+          "expr": "count(sum by (instance) (rate(stratum_accepted_submits_counter{job=~\"$OS\",label=~\"$label\"}[$interval])) > 0 or \nsum by (instance) (rate(stratum_accepted_shares_counter{job=~\"$OS\",label=~\"$label\"}[$interval])) > 0 or \nsum by (instance) (average_hashrate_last_5_sec_ghs{job=~\"$OS\",label=~\"$label\"}) > 0)\nor vector(0)",
           "hide": false,
           "instant": true,
           "interval": "",
           "legendFormat": "Mining",
-          "refId": "Mining"
+          "refId": "C"
         },
         {
           "datasource": {
@@ -244,643 +290,64 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "count(max by (instance) (rate(hashboard_shares[60s]) or up{job=\"braiinsos-data\"} * 0) == 0)",
+          "expr": "count(\n  max by (instance,job) (rate(stratum_accepted_submits_counter{job=~\"$OS\",label=~\"$label\",instance!=\"localhost:8081\"}[$interval]) or \n                         rate(stratum_accepted_shares_counter{job=~\"$OS\",label=~\"$label\",instance!=\"localhost:8081\"}[$interval]) or\n                         average_hashrate_last_5_sec_ghs{job=~\"$OS\",label=~\"$label\"} or\n                         up{job=~\"$OS\",label=~\"$label\",instance!=\"localhost:8081\"} - 1) == 0\n)",
           "hide": false,
           "instant": true,
           "interval": "",
           "legendFormat": "Not Mining",
-          "refId": "A"
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count(up{job=~ \"$OS\",label=~\"$label\",instance!=\"localhost:8081\"} == 0) or vector(0)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Offline",
+          "refId": "E"
         }
       ],
-      "title": "Miner Status",
+      "title": "Miner Recognition",
       "type": "stat"
     },
     {
-      "description": "",
+      "description": "Links to the *Braiins* product webpages",
       "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 18,
+        "h": 5,
+        "w": 8,
+        "x": 16,
         "y": 1
       },
-      "id": 126,
+      "id": 6,
       "options": {
-        "content": "<table width=\"100%\" style:\" border: none !important; table-layout: fixed; \" id=\"bps-table\">\n<tr>\n<td style=\"text-align: center; padding: 16px 0; width:50%;\"><a href=\"https://braiins.com/os/plus?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-os-plus-logo-reverse-rgb.svg?h=d35e19f3056bef1664b2c5cbde453a44\" height=\"25px\" align=\"center\"></a></td>\n<td style=\"text-align: center; padding: 16px 0; width:50%;\"><a href=\"https://slushpool.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"><img src=\"https://design.braiins.com/assets/img/logos/slushpool-logo-reverse-rgb.svg?h=6e9e1089b4b55194f400c37f6482f7e7\" height=\"25px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 16px 0;\"><a href=\"https://stratumprotocol.org/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/stratum-v2-logo-reverse-rgb.svg?h=77e94750d6f57e33cf70c51e07e5aac5\" height=\"14px\"></a></td>\n<td style=\"text-align: center; padding: 16px 0;\"><a href=\"https://insights.braiins.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-insights-logo-on-dark-background-rgb.svg?h=aad9d059abab45e38f162e05c1fa322f\" height=\"17px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 16px 0;\" colspan=\"2\"><a href=\"https://braiins.com/farm-proxy/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/farm-proxy-logo-white-rgb.svg?h=3e5188e1d46f58ccb0b910c6f8184b9b\" height=\"30px\"></a></td>\n</tr>\n</table>",
+        "content": "<table width=\"100%\" style:\" border: none !important; table-layout: fixed; \" id=\"bps-table\">\n<tr>\n<td style=\"text-align: center; padding: 10px 0; width:50%;\"><a href=\"https://braiins.com/os/plus?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-os-plus-logo-reverse-rgb.svg?h=d35e19f3056bef1664b2c5cbde453a44\" height=\"25px\" align=\"center\"></a></td>\n<td style=\"text-align: center; padding: 10px 0; width:50%;\"><a href=\"https://braiins.com/pool\"  target=\"_blank\"><img src=\"https://braiins.visualbook.pro/assets/img/logos/braiins-pool-logo-reverse-rgb.svg\" height=\"25px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 10px 0;\"><a href=\"https://stratumprotocol.org/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/stratum-v2-logo-reverse-rgb.svg?h=77e94750d6f57e33cf70c51e07e5aac5\" height=\"14px\"></a></td>\n<td style=\"text-align: center; padding: 10px 0;\"><a href=\"https://insights.braiins.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-insights-logo-on-dark-background-rgb.svg?h=aad9d059abab45e38f162e05c1fa322f\" height=\"17px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 10px 0;\" colspan=\"2\"><a href=\"https://braiins.com/farm-proxy/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/farm-proxy-logo-white-rgb.svg?h=3e5188e1d46f58ccb0b910c6f8184b9b\" height=\"30px\"></a></td>\n</tr>\n</table>",
         "mode": "html"
       },
       "pluginVersion": "8.4.0",
-      "title": "Braiins Product Stack",
+      "title": "Braiins Products",
       "type": "text"
     },
     {
-      "description": "",
+      "description": "**Measured to calculated ratio**: real hashrate / nominal hashrate \\\nnote: MCR not available for Antminers S9 with BOS+",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "#6b50ff",
-            "mode": "fixed"
+            "mode": "continuous-RdYlGr"
           },
-          "decimals": 0,
+          "links": [],
           "mappings": [],
+          "max": 1,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 6,
-        "x": 6,
-        "y": 6
-      },
-      "id": 43,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": true,
-          "expr": "avg(fan_speed_control)",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "B"
-        }
-      ],
-      "title": "Average Fan %",
-      "type": "stat"
-    },
-    {
-      "description": "Average temperature from max temperatures on miner (chip sensor measure or estimate)",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "#6b50ff",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 6,
-        "x": 12,
-        "y": 6
-      },
-      "id": 53,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": true,
-          "expr": "avg by (location) (max by(location, instance) (temperature{location=\"chip\"}))",
-          "interval": "",
-          "legendFormat": "Temperature",
-          "refId": "A"
-        }
-      ],
-      "title": "Temperature",
-      "type": "stat"
-    },
-    {
-      "description": "Current real hashrate based on shares from last 10 seconds.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#6b50ff",
-                "value": null
-              }
-            ]
-          },
-          "unit": "Hs"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 6,
-        "x": 0,
-        "y": 7
-      },
-      "id": 40,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": true,
-          "expr": "sum(rate(hashboard_shares[10s])) * 2^32",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Total HR",
-      "type": "stat"
-    },
-    {
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#6b50ff",
-                "value": null
-              }
-            ]
-          },
-          "unit": "watt"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 18,
-        "y": 7
-      },
-      "id": 75,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": true,
-          "expr": "sum(miner_power{type=\"limit\"})",
-          "interval": "",
-          "legendFormat": "Estimated Power",
-          "refId": "A"
-        }
-      ],
-      "title": "Power Limit",
-      "type": "stat"
-    },
-    {
-      "description": "Status of individual defined pool connections",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "",
-              "url": "d/bflmpsvz/drill-down-active-pool-instance?${data_source:queryparam}&var-host=${__series.name}"
-            }
-          ],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 9,
-        "x": 9,
-        "y": 11
-      },
-      "id": 120,
-      "options": {
-        "displayMode": "gradient",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": false,
-          "expr": "sort_desc((count_values('x',client_status{connection_type=\"user\"} > 0) by (host)))",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{host}} ",
-          "refId": "A"
-        }
-      ],
-      "title": "Client Status - Active (Mining) Pools",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "S1",
-            "renamePattern": "Act"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "S-1",
-            "renamePattern": "Dead"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "S0",
-            "renamePattern": "Alive"
-          }
-        }
-      ],
-      "type": "bargauge"
-    },
-    {
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#6b50ff",
-                "value": null
-              }
-            ]
-          },
-          "unit": "watt"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 18,
-        "y": 11
-      },
-      "id": 52,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": true,
-          "expr": "sum(miner_power{type=\"estimated\"})",
-          "interval": "",
-          "legendFormat": "Estimated Power",
-          "refId": "A"
-        }
-      ],
-      "title": "Estimated Power",
-      "type": "stat"
-    },
-    {
-      "description": "Status of individual defined pool connections",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "Show Instances",
-              "url": "d/HL10OOs7z/drill-down-dead-pool-instance?${data_source:queryparam}&var-host=${__series.name}"
-            }
-          ],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 9,
-        "x": 0,
-        "y": 12
-      },
-      "id": 117,
-      "options": {
-        "displayMode": "gradient",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": false,
-          "expr": "sort_desc((count_values('x',client_status{connection_type=\"user\"} < 0) by (host))) # ",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{host}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Client Status - Dead Pools",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "S1",
-            "renamePattern": "Act"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "S-1",
-            "renamePattern": "Dead"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "S0",
-            "renamePattern": "Alive"
-          }
-        }
-      ],
-      "type": "bargauge"
-    },
-    {
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "",
-              "url": "d/9ppW5Oy7z/drill-down-stage-instance?var-tuner_stage=${__field.labels.Stage}&${data_source:queryparam}"
-            }
-          ],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 18,
-        "y": 15
-      },
-      "id": 81,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {
-          "titleSize": 14,
-          "valueSize": 14
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.4.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": false,
-          "expr": "count_values (\"Stage\", max by (instance) (tuner_stage))\n\n#max by (instance) (tuner_stage)\n",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{Stage}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Tuner Stage",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "2",
-            "renamePattern": "Test. PP"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "3",
-            "renamePattern": "Chip Tun."
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "4",
-            "renamePattern": "Stable"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "5",
-            "renamePattern": "Fail"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "6",
-            "renamePattern": "Man"
-          }
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "description": "20  seconds MCR is calculated and miners with lowest result are shown. Links are on IP address.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "decimals": 0,
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "",
-              "url": "http://${__field.labels.instance}"
-            }
-          ],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 0.8
-              },
-              {
-                "color": "dark-green",
-                "value": 0.9
               }
             ]
           },
@@ -889,26 +356,23 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 2,
         "w": 9,
-        "x": 9,
-        "y": 19
+        "x": 0,
+        "y": 5
       },
-      "id": 121,
+      "id": 150,
       "options": {
-        "displayMode": "gradient",
+        "displayMode": "lcd",
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
-            "last"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
         },
-        "showUnfilled": true,
-        "text": {
-          "valueSize": 14
-        }
+        "showUnfilled": true
       },
       "pluginVersion": "8.4.0",
       "targets": [
@@ -918,52 +382,439 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "bottomk(10, \n    sort(\n        sum by (building, instance) (rate(hashboard_shares[20s])) * 2^32\n        /\n        sum by(building, instance) (hashboard_nominal_hashrate_gigahashes_per_second * 1e9)\n    )\n)",
+          "expr": "sum(hashboard_nominal_hashrate_ghs{job=~\"$OS\",label=~\"$label\"})",
+          "hide": true,
           "instant": true,
           "interval": "",
-          "legendFormat": "{{building}} {{instance}}",
+          "legendFormat": "Nominal HR",
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sum(\n  sum by (instance) (rate(hashboard_shares{job=~\"$OS\",label=~\"$label\"}[$interval]) * 2^32 / 1e9) or \n  sum by (instance) (rate(stratum_accepted_shares_counter{job=~\"$OS\",label=~\"$label\"}[$interval]) * 2^32 / 1e9) or \n  sum by (instance) (average_hashrate_last_5_sec_ghs{job=~\"$OS\",label=~\"$label\"})\n  )",
+          "hide": true,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Real HR (10s)",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sum (\n(sum by (instance) (rate(hashboard_shares{}[1m]) * 2^32 / 1e9) or\n sum by (instance) (rate(stratum_accepted_shares_counter{}[$interval]) * 2^32 / 1e9) or \n sum by (instance) (average_hashrate_last_5_sec_ghs{}))\n + on (instance) group_left()(sum by (instance)(hashboard_nominal_hashrate_ghs{})*0)\n)\n/sum(\n(sum by (instance) (rate(hashboard_shares{}[1m]) * 2^32 / 1e9) * 0 or\n sum by (instance) (rate(stratum_accepted_shares_counter{}[$interval]) * 2^32 / 1e9) * 0 or \n sum by (instance) (average_hashrate_last_5_sec_ghs{})) * 0\n + on (instance) group_left()(sum by (instance)(hashboard_nominal_hashrate_ghs{}))\n)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "MCR",
+          "refId": "C"
         }
       ],
-      "title": "10 Miners with lowest MCR",
+      "title": "MCR",
       "type": "bargauge"
     },
     {
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "id": 131,
+      "options": {
+        "content": "Farm Monitor guideline: [documentation](https://academy.braiins.com/en/farm-monitor/about)\n\n[Get support](https://help.braiins.com/en/support/tickets/new) from the Braiins team\n\n*Dashboard is interactive, most of the graphs redirect user to a detail after a click on the statistic/graph.*\n\nFarm Monitor displays only data from devices running on **BOS+** or **stock firmware** (Antminers X17 and X19). BOS+ exposes it's metrics on `ip-address:8081/metrics` and provides many more data then the stock firmware. Data from stock are pulled from cgminer API by **metrics-exporter** and then exposed on `host:8081/metrics` to be digested by Prometheus.",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.4.0",
+      "title": "TL;DR",
+      "type": "text"
+    },
+    {
+      "description": "Hashrate by FW Type: BOS+ vs. Stock FW",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-RdYlGr"
           },
-          "links": [
+          "displayName": "${__series.name}",
+          "mappings": [
             {
-              "targetBlank": true,
-              "title": "",
-              "url": "d/rkP23dy7z/drill-down-less-than-3-hbs-instance?from=now-15m&to=now&${data_source:queryparam}"
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
-          "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-purple",
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "GHs"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 4,
-        "w": 6,
-        "x": 18,
-        "y": 19
+        "w": 9,
+        "x": 0,
+        "y": 7
       },
-      "id": 124,
-      "links": [],
+      "id": 133,
       "options": {
-        "colorMode": "none",
+        "displayMode": "lcd",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "#sum by (job) (rate(hashboard_shares{job=~\"braiinsos-data|metrics-exporter\",label=~\"$label\"}[10s]) * 2^32 / 1e9 or average_hashrate_last_5_sec_ghs#{job=~\"braiinsos-data|metrics-exporter\",label=~\"$label\"})\n\nsum by (job) (\n  sum by (instance,job) (rate(hashboard_shares{job=~\"braiinsos-data|metrics-exporter\",label=~\"$label\"}[$interval]) * 2^32 / 1e9) or \n  sum by (instance,job) (rate(stratum_accepted_shares_counter{job=~\"braiinsos-data|metrics-exporter\",label=~\"$label\"}[1m]) * 2^32 / 1e9) or \n  sum by (instance,job) (average_hashrate_last_5_sec_ghs{job=~\"braiinsos-data|metrics-exporter\",label=~\"$label\"})\n  )",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Hashrate by FW Type",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "braiinsos-data",
+            "renamePattern": "BOS+"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "metrics-exporter",
+            "renamePattern": "Stock FW"
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "description": "Discovered miners by FW type: *BOS+* vs. *Stock FW*",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "d/GouhRHNVk/drill-down-os-instance?&var-os_type=${__field.labels.job}"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "locale"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 7,
+        "x": 9,
+        "y": 7
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "#sum(metrics_exporter_discovered_devices{fw=~\"bos|stock\"}) by (fw)\ncount by (job) (up{job=~\"$OS\",label=~\"$label\",instance!=\"localhost:8081\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{job}}",
+          "refId": "A"
+        }
+      ],
+      "title": "FW Type",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "braiinsos-data",
+            "renamePattern": "BOS+"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "metrics-exporter",
+            "renamePattern": "Stock FW"
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "description": "Maximal temperature from the monitored miners (chip/hashboard sensor measure) \\\n\\\n*note: temperatures > 200 C are filtered out because such values are nonsense (but they can appear in Stock FW when the miner has problems with fan detection)*",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-purple",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 80
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 11
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": true,
+          "expr": "max(temperature{location=\"chip\",job=~\"$OS\",label=~\"$label\"} < 200) or\nmax(hashboard_temperature{type=\"raw\",job=~\"$OS\",label=~\"$label\"} < 200)",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Maximal Temperature",
+      "type": "stat"
+    },
+    {
+      "description": "Average fan speed, available only for BOS+ devices.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-purple",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 80
+              },
+              {
+                "color": "dark-red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 11
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": true,
+          "expr": "avg(fan_speed_control{job=\"braiinsos-data\",label=~\"$label\"})",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Average Fan % (only BOS+)",
+      "type": "stat"
+    },
+    {
+      "description": "Targeted power consumption of the farm (only BOS+)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 11
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -984,72 +835,68 @@
             "type": "prometheus",
             "uid": "PABF2E7BD7AE7B0F4"
           },
-          "exemplar": false,
-          "expr": "count(count by(instance) (rate(hashboard_shares{type=\"valid\"}[20s]) > 0) <3)",
-          "instant": true,
+          "exemplar": true,
+          "expr": "sum(miner_power_target_w{type=\"configured\",job=\"braiinsos-data\",label=~\"$label\"}) or sum(miner_power{type=\"limit\",job=\"braiinsos-data\",label=~\"$label\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Less Than 3 HBs",
-      "transformations": [],
+      "title": "Farm Power Target (only BOS+)",
       "type": "stat"
     },
     {
+      "description": "Estimated power consumption of the farm (only for BOS+ devices)",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "decimals": 0,
-          "links": [
+          "mappings": [
             {
-              "targetBlank": true,
-              "title": "",
-              "url": "http://${__field.labels.instance}"
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-purple",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
-          "unit": "celsius"
+          "unit": "watt"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 9,
-        "x": 0,
-        "y": 20
+        "h": 4,
+        "w": 3,
+        "x": 12,
+        "y": 11
       },
-      "id": 119,
-      "links": [],
+      "id": 18,
       "options": {
-        "displayMode": "gradient",
-        "orientation": "horizontal",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "last"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
         },
-        "showUnfilled": true,
-        "text": {
-          "valueSize": 14
-        }
+        "textMode": "auto"
       },
       "pluginVersion": "8.4.0",
       "targets": [
@@ -1058,110 +905,224 @@
             "type": "prometheus",
             "uid": "PABF2E7BD7AE7B0F4"
           },
-          "exemplar": false,
-          "expr": "topk(10,sort_desc(max by(building, instance) (temperature)))",
-          "instant": true,
+          "exemplar": true,
+          "expr": "sum(miner_power_target_w{type=\"current\",job=\"braiinsos-data\",label=~\"$label\"}) or sum(miner_power{type=\"estimated\",job=\"braiinsos-data\",label=~\"$label\"})",
+          "instant": false,
           "interval": "",
-          "legendFormat": "{{building}}, {{instance}}",
+          "legendFormat": "Estimated Power",
           "refId": "A"
         }
       ],
-      "title": "Temperature Top 10 Instances",
-      "type": "bargauge"
+      "title": "Farm Est. Power (only BOS+)",
+      "type": "stat"
     },
     {
+      "description": "Average efficiency as *Watt / THs* (only for BOS+ devices)",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-purple",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
-          }
+          },
+          "unit": "W / THs"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Time"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 245
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Site"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 86
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Subnet"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 74
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Miners"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 89
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 18,
-        "y": 23
+        "h": 4,
+        "w": 3,
+        "x": 15,
+        "y": 11
       },
-      "id": 129,
+      "id": 167,
       "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
           ],
-          "show": true
+          "fields": "",
+          "values": false
         },
-        "showHeader": true,
-        "sortBy": []
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": true,
+          "expr": "avg\n((((sum by (instance) (miner_power_target_w{type=\"current\",job=\"braiinsos-data\",label=~\"$label\"}) or sum by (instance) (miner_power{type=\"estimated\",job=\"braiinsos-data\",label=~\"$label\"})) / on (instance) group_left(model) (sum by (instance) (rate(hashboard_shares{job=\"braiinsos-data\",label=~\"$label\"}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata{job=\"braiinsos-data\",label=~\"$label\"})) < 1e12 or\n(((sum by (instance) (miner_power_target_w{type=\"current\",job=\"braiinsos-data\",label=~\"$label\"}) or sum by (instance) (miner_power{type=\"estimated\",job=\"braiinsos-data\",label=~\"$label\"})) / on (instance) group_left(model) (sum by (instance) (rate(stratum_accepted_shares_counter{job=\"braiinsos-data\",label=~\"$label\"}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata{job=\"braiinsos-data\",label=~\"$label\"})) < 1e12)",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Estimated Power",
+          "refId": "A"
+        }
+      ],
+      "title": "Avg. Efficiency(only BOS+)",
+      "type": "stat"
+    },
+    {
+      "description": "Number of currently tuning devices (only for BOS+ devices)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "Go to list of currently autotuning devices",
+              "url": "d/ixQBxdHVk/drill-down-tuning-instance?"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "locale"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 18,
+        "y": 11
+      },
+      "id": 153,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": true,
+          "expr": "count(max by(instance) (tuner_stage{job=\"braiinsos-data\",label=~\"$label\"} == 2 or tuner_stage{job=\"braiinsos-data\",label=~\"$label\"} == 3))",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Estimated Power",
+          "refId": "A"
+        }
+      ],
+      "title": "Autotuning In Progress (only BOS+)",
+      "type": "stat"
+    },
+    {
+      "description": "Number of devices with less than 3 hasboards hashing.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "d/rkP23dy7z/drill-down-less-than-3-hbs-instance?from=now-15m&to=now&"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 11
+      },
+      "id": 53,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
       "pluginVersion": "8.4.0",
       "targets": [
@@ -1171,38 +1132,15 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "count(miner_metadata) by(site_id, subnet_id)",
-          "format": "table",
+          "expr": "count(count by(instance) (rate(hashboard_shares{type=\"valid\",job=\"braiinsos-data\",label=~\"$label\"}[$interval]) > 0) <3)",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Miners by Site/Subnet",
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true
-            },
-            "indexByName": {
-              "Time": 3,
-              "Value": 2,
-              "site_id": 0,
-              "subnet_id": 1
-            },
-            "renameByName": {
-              "Time": "",
-              "Value": "Miners",
-              "site_id": "Site",
-              "subnet_id": "Subnet"
-            }
-          }
-        }
-      ],
-      "type": "table"
+      "title": "Less Than 3 HBs (only BOS+)",
+      "type": "stat"
     },
     {
       "collapsed": false,
@@ -1210,15 +1148,15 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 15
       },
-      "id": 107,
+      "id": 139,
       "panels": [],
-      "title": "Over Time",
+      "title": "Hashrate",
       "type": "row"
     },
     {
-      "description": "Real and Nominal Hashrate",
+      "description": "Real (valid) and nominal hashrate over time",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1226,7 +1164,7 @@
           },
           "custom": {
             "axisLabel": "",
-            "axisPlacement": "left",
+            "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
@@ -1252,7 +1190,18 @@
               "mode": "off"
             }
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1262,17 +1211,17 @@
               }
             ]
           },
-          "unit": "Hs"
+          "unit": "GHs"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 8,
+        "h": 9,
+        "w": 24,
         "x": 0,
-        "y": 31
+        "y": 16
       },
-      "id": 108,
+      "id": 34,
       "options": {
         "legend": {
           "calcs": [],
@@ -1284,7 +1233,6 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -1292,10 +1240,9 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum by(type) (rate(hashboard_shares[10s])) * 2^32",
-          "hide": false,
+          "expr": "sum(\n  sum by (instance) (rate(hashboard_shares{job=~\"$OS\",label=~\"$label\"}[$interval]) * 2^32 / 1e9) or \n  sum by (instance) (rate(stratum_accepted_shares_counter{job=~\"$OS\",label=~\"$label\"}[$interval]) * 2^32 / 1e9) or \n  sum by (instance) (average_hashrate_last_5_sec_ghs{job=~\"$OS\",label=~\"$label\"})\n  )",
           "interval": "",
-          "legendFormat": "{{type}}",
+          "legendFormat": "Real Hashrate",
           "refId": "A"
         },
         {
@@ -1304,15 +1251,254 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "sum(hashboard_nominal_hashrate_gigahashes_per_second) * 1e9",
+          "expr": "sum(hashboard_nominal_hashrate_ghs{job=~\"$OS\",label=~\"$label\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "Nominal Hashrate",
           "refId": "B"
         }
       ],
-      "title": "Real HR, Nominal HR",
+      "title": "Hashrate",
       "type": "timeseries"
+    },
+    {
+      "description": "Hashrate by type (segmentation only for BOS+): \\\n*duplicate*: duplicate shares which are producing duplicate hashrate \\\n*invalid*: stales and other rejects are producing invalid hashrate \\\n*valid*: accepted shares producing valid hashrate",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Hs"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "valid"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "duplicate"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "invalid"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 25
+      },
+      "id": 147,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": true,
+          "expr": "sum by(type) (rate(hashboard_shares{job=\"braiinsos-data\",label=~\"$label\"}[$interval])) * 2^32",
+          "interval": "",
+          "legendFormat": "{{type}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Hashrate by type (only BOS+)",
+      "type": "timeseries"
+    },
+    {
+      "description": "Miners with lowest MCR \\\nClick to the column to get redirected to the miner \\\n**Measured to calculated ratio**: real hashrate / nominal hashrate \\\nnote: MCR not available for Antminers S9 with BOS+",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-RdYlGr"
+          },
+          "decimals": 0,
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "Go to the miner",
+              "url": "http://${__field.labels.instance}\n\n"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 25
+      },
+      "id": 30,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "bottomk(10, \n    sort(\n        sum by (label,instance) (rate(hashboard_shares{job=~\"$OS\",label=~\"$label\"}[$interval]) * 2^32 / 1e9 or average_hashrate_last_5_sec_ghs{job=~\"$OS\",label=~\"$label\"})\n        /\n        sum by (label,instance) (hashboard_nominal_hashrate_ghs{job=~\"$OS\",label=~\"$label\"})\n    )\n)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": " {{label}}, {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "10 Miners with lowest MCR",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "id": 152,
+      "panels": [],
+      "title": "Miner Count",
+      "type": "row"
     },
     {
       "description": "Number of miners sending data.",
@@ -1324,9 +1510,10 @@
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 21,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -1334,7 +1521,102 @@
               "viz": false
             },
             "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineWidth": 3,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-purple",
+                "value": null
+              }
+            ]
+          },
+          "unit": "locale"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 35
+      },
+      "id": 29,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": true,
+          "expr": "count(count by (instance) (miner_metadata{job=~\"$OS\",label=~\"$label\"}))",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Running Miners",
+      "type": "timeseries"
+    },
+    {
+      "description": "Number of instances that are monitored (scraped by Prometheus) successfully (Up) or not (Down).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 21,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 3,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -1356,24 +1638,50 @@
               {
                 "color": "green",
                 "value": null
-              },
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Down"
+            },
+            "properties": [
               {
-                "color": "red",
-                "value": 80
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
               }
             ]
           },
-          "unit": "none"
-        },
-        "overrides": []
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Up"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 8,
-        "y": 31
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 35
       },
-      "id": 113,
+      "id": 38,
       "options": {
         "legend": {
           "calcs": [],
@@ -1385,7 +1693,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -1393,18 +1701,46 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "count(count by (instance) (miner_metadata))",
-          "hide": false,
+          "expr": "count_values(\"Status\",up{job=~\"$OS\",label=~\"$label\"})",
           "interval": "",
-          "legendFormat": "Running Miners",
+          "legendFormat": "{{Status}}",
           "refId": "A"
         }
       ],
-      "title": "Running Miners",
+      "title": "Miner Health",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "1",
+            "renamePattern": "Up"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "0",
+            "renamePattern": "Down"
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
-      "description": "Maximum temperature is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated.",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "id": 135,
+      "panels": [],
+      "title": "Temperature Control",
+      "type": "row"
+    },
+    {
+      "description": "At first, Maximum temperature is taken from each instance (miner).  Then Minimum, Average, and Maximum is calculated. \\\n\\\n*note: temperatures > 200 C are filtered out because such values are nonsense (but they can appear in Stock FW when the miner has problems with fan detection)*",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1438,7 +1774,18 @@
               "mode": "off"
             }
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1464,7 +1811,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "red",
+                  "fixedColor": "dark-red",
                   "mode": "fixed"
                 }
               }
@@ -1503,12 +1850,12 @@
         ]
       },
       "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 16,
-        "y": 31
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 44
       },
-      "id": 109,
+      "id": 36,
       "options": {
         "legend": {
           "calcs": [],
@@ -1520,7 +1867,6 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -1528,8 +1874,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "avg(max by (instance) (temperature))",
-          "hide": false,
+          "expr": "avg(max by (instance) (temperature{job=~\"$OS\",label=~\"$label\"} < 200) or max by (instance) (hashboard_temperature{job=~\"$OS\",label=~\"$label\",type=\"raw\"} < 200))",
           "interval": "",
           "legendFormat": "Avg Temperature",
           "refId": "A"
@@ -1540,7 +1885,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "max(max by (instance) (temperature))",
+          "expr": "max(max by (instance) (temperature{job=~\"$OS\",label=~\"$label\"} < 200) or max by (instance) (hashboard_temperature{job=~\"$OS\",label=~\"$label\",type=\"raw\"} < 200))",
           "hide": false,
           "interval": "",
           "legendFormat": "Max Temperature",
@@ -1552,7 +1897,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "min(max by (instance) (temperature))",
+          "expr": "min(max by (instance) (temperature{job=~\"$OS\",label=~\"$label\"} < 200) or max by (instance) (hashboard_temperature{job=~\"$OS\",label=~\"$label\",type=\"raw\"} < 200))",
           "hide": false,
           "interval": "",
           "legendFormat": "Min Temperature",
@@ -1563,41 +1908,33 @@
       "type": "timeseries"
     },
     {
-      "description": "Estimated power consumption in Watts and power limit.",
+      "description": "Top 10 instances by highest temperature. \\\n\\\n*note: temperatures > 200 C are filtered out because such values are nonsense (but they can appear in Stock FW when the miner has problems with fan detection)*",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "continuous-GrYlRd"
           },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
+          "decimals": 0,
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "Go to the miner",
+              "url": "http://${__field.labels.instance}"
             }
-          },
-          "mappings": [],
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1611,76 +1948,49 @@
               }
             ]
           },
-          "unit": "watt"
+          "unit": "celsius"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "sum(miner_power{type=\"limit\"})"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 0,
-        "y": 38
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 44
       },
-      "id": 112,
+      "id": 27,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showUnfilled": true
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "PABF2E7BD7AE7B0F4"
           },
-          "exemplar": true,
-          "expr": "sum(miner_power{type=\"estimated\"})",
-          "hide": false,
+          "exemplar": false,
+          "expr": "topk(10,sort_desc(max by(label,instance) (temperature{job=~\"$OS\",label=~\"$label\"} < 200) or max by(label,instance) (hashboard_temperature{type=\"raw\",job=~\"$OS\",label=~\"$label\"} < 200)))",
+          "instant": true,
           "interval": "",
-          "legendFormat": "Estimated Power (W)",
+          "legendFormat": " {{label}}, {{instance}}",
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": true,
-          "expr": "sum(miner_power{type=\"limit\"})",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "Power Limit (W)",
-          "refId": "B"
         }
       ],
-      "title": "Power Limit & Est. Consumption (W)",
-      "type": "timeseries"
+      "title": "Temperature Top 10 Instances",
+      "type": "bargauge"
     },
     {
-      "description": "Maximum temperature is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated.",
+      "description": "Maximum fan speed is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1714,7 +2024,18 @@
               "mode": "off"
             }
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1731,66 +2052,6 @@
           "unit": "percent"
         },
         "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Max Temperature"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Min Temperature"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Avg Temperature"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Avg Fan Speed"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
           {
             "matcher": {
               "id": "byName",
@@ -1820,16 +2081,31 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Avg Fan Speed"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
       "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 8,
-        "y": 38
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 53
       },
-      "id": 111,
+      "id": 40,
       "options": {
         "legend": {
           "calcs": [],
@@ -1841,7 +2117,6 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -1849,8 +2124,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "avg(max by (instance) (fan_speed_control))",
-          "hide": false,
+          "expr": "avg(max by (instance) (fan_speed_control{job=\"braiinsos-data\",label=~\"$label\"}))",
           "interval": "",
           "legendFormat": "Avg Fan Speed",
           "refId": "A"
@@ -1861,7 +2135,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "max(max by (instance) (fan_speed_control))",
+          "expr": "max(max by (instance) (fan_speed_control{job=\"braiinsos-data\",label=~\"$label\"}))",
           "hide": false,
           "interval": "",
           "legendFormat": "Max Fan Speed",
@@ -1873,18 +2147,318 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "min(max by (instance) (fan_speed_control))",
+          "expr": "min(max by (instance) (fan_speed_control{job=\"braiinsos-data\",label=~\"$label\"}))",
           "hide": false,
           "interval": "",
           "legendFormat": "Min Fan Speed",
           "refId": "C"
         }
       ],
-      "title": "Min, Avg, Max Fan Speed",
+      "title": "Min, Avg, Max Fan Speed (only BOS+)",
       "type": "timeseries"
     },
     {
-      "description": "Power limit is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated.",
+      "description": "Maximum RPM is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated per each miner model.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "locale"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 53
+      },
+      "id": 169,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "avg by (model) (max by (model,instance) (miner_metadata{job=~\"$OS\",label=~\"$label\"} + on (instance) group_right(model) fan_rpm_feedback{job=~\"$OS\",label=~\"$label\"}))",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Avg Fan RPM",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "max by (model) (max by (model,instance) (miner_metadata{job=~\"$OS\",label=~\"$label\"} + on (instance) group_right(model) fan_rpm_feedback{job=~\"$OS\",label=~\"$label\"}))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Max Fan RPM",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "min by (model) (max by (model,instance) (miner_metadata{job=~\"$OS\",label=~\"$label\"} + on (instance) group_right(model) fan_rpm_feedback{job=~\"$OS\",label=~\"$label\"}))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Min Fan RPM",
+          "refId": "C"
+        }
+      ],
+      "title": "Min, Avg, Max Fan RPM",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "model"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Value #A": false
+            },
+            "indexByName": {
+              "Time 1": 4,
+              "Time 2": 5,
+              "Time 3": 6,
+              "Value #A": 1,
+              "Value #B": 2,
+              "Value #C": 3,
+              "model": 0
+            },
+            "renameByName": {
+              "Time 1": "Time",
+              "Value": "Max RPM",
+              "Value #A": "Avg Fan RPM",
+              "Value #B": "Max Fan RPM",
+              "Value #C": "Min Fan RPM",
+              "model": "Model"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 61
+      },
+      "id": 141,
+      "panels": [],
+      "title": "Mining Pools",
+      "type": "row"
+    },
+    {
+      "description": "Active pool connections calculated as count over all miners",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "d/bflmpsvz/drill-down-active-pool-instance?var-host=${__series.name}"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 62
+      },
+      "id": 25,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sort_desc(count_values('x',client_status{job=~\"$OS\",label=~\"$label\",connection_type=\"user\"} > 0) by (host))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{host}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Active Pools",
+      "type": "bargauge"
+    },
+    {
+      "description": "Dead pool connections calculated as count over all miners",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "d/HL10OOs7z/drill-down-dead-pool-instance?&var-host=${__field.labels.host}﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 62
+      },
+      "id": 24,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sort_desc(count_values('x',client_status{job=~\"$OS\",label=~\"$label\",connection_type=\"user\",host!=\"\"} < 0) by (host))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{host}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Dead Pools",
+      "type": "bargauge"
+    },
+    {
+      "description": "Pools URLs defined in the configuration of the individual miners, where no mining activity is detected.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1918,7 +2492,623 @@
               "mode": "off"
             }
           },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 69
+      },
+      "id": 49,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": true,
+          "expr": "count_values(\"Status\", client_status{job=~\"$OS\",label=~\"$label\"} < 0) by (host)",
+          "interval": "",
+          "legendFormat": "{{host}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Dead Pools Over Time",
+      "type": "timeseries"
+    },
+    {
+      "description": "Number of active connections per mining protocol ~ SV1 vs. SV2.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "Go to miners",
+              "url": "d/g198TdN4k/drill-down-protocol-instance?&var-protocol=${__field.labels.protocol}"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 69
+      },
+      "id": 149,
+      "options": {
+        "displayMode": "lcd",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count by (protocol) (client_status{job=~\"$OS\",label=~\"$label\",connection_type=\"user\"} == 1)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{protocol}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Mining Protocol",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": ".[^+]*$",
+            "renamePattern": ""
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 77
+      },
+      "id": 145,
+      "panels": [],
+      "title": "Miners",
+      "type": "row"
+    },
+    {
+      "description": "Model types of the miners",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "d/urEYt4I4k/drill-down-miner-model-instance?var-miner_model=${__series.name}﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 78
+      },
+      "id": 57,
+      "options": {
+        "displayMode": "lcd",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sort_desc(count_values('x',miner_metadata{job=~\"$OS\",label=~\"$label\"}) by (model))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{model}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Miners count by model",
+      "type": "bargauge"
+    },
+    {
+      "description": "Version of the firmware \\\n*BOS+*: bos:{version} \\\n*Stock FW*: stock:{version}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-BlPu"
+          },
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "d/uZT-Tds7z/drill-down-os-version-instance?var-os_version=${__field.labels.os_version}"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "noValue": "N/A",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 78
+      },
+      "id": 55,
+      "options": {
+        "displayMode": "lcd",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sort_desc(count by (os_version, job) (miner_metadata{job=~\"$OS\",label=~\"$label\"}))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{job}},{{os_version}}",
+          "refId": "A"
+        }
+      ],
+      "title": "OS Version",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "metrics-exporter",
+            "renamePattern": "Stock FW"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "braiinsos-data",
+            "renamePattern": "BOS+"
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "description": "Average hashrate by miner model",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-RdYlGr"
+          },
+          "displayName": "${__series.name}",
           "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "GHs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 86
+      },
+      "id": 164,
+      "options": {
+        "displayMode": "basic",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sort_desc(avg by (model) (\n    sum by (model,instance) (miner_metadata{job=~\"$OS\",label=~\"$label\"} + on(instance) group_right(model) rate(hashboard_shares{job=~\"$OS\",label=~\"$label\"}[$interval])) * 2^32 / 1e9 or\n    sum by (model,instance) (miner_metadata{job=~\"$OS\",label=~\"$label\"} + on(instance) group_right(model) rate(stratum_accepted_shares_counter{job=~\"$OS\",label=~\"$label\"}[1m])) * 2^32 / 1e9 or\n    sum by (model,instance) (miner_metadata{job=~\"$OS\",label=~\"$label\"} + on(instance) group_right(model) (average_hashrate_last_5_sec_ghs{job=~\"$OS\",label=~\"$label\"}))\n))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{model}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Average Hashrate By Model",
+      "type": "bargauge"
+    },
+    {
+      "description": "Average, min and max efficiency by each miner model. Available only for *BOS+*",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "See instances my model and their efficiency",
+              "url": "d/7ShdZZN4z/drill-down-miner-efficiency-instance?&var-miner_model=${__data.fields.Model}\n\n"
+            }
+          ],
+          "mappings": [],
+          "noValue": "-",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "W / THs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 86
+      },
+      "id": 166,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "AvgEff"
+          }
+        ]
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "min by (model)\n((((sum by (instance) (miner_power_target_w{type=\"current\"}) or sum by (instance) (miner_power{type=\"estimated\"})) / on (instance) group_left(model) (sum by (instance) (rate(hashboard_shares{}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata)) < 1e12 or\n(((sum by (instance) (miner_power_target_w{type=\"current\"}) or sum by (instance) (miner_power{type=\"estimated\"})) / on (instance) group_left(model) (sum by (instance) (rate(stratum_accepted_shares_counter{}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata)) < 1e12)",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{model}}",
+          "refId": "MinEff"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "max by (model)\n((((sum by (instance) (miner_power_target_w{type=\"current\"}) or sum by (instance) (miner_power{type=\"estimated\"})) / on (instance) group_left(model) (sum by (instance) (rate(hashboard_shares{}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata)) < 1e12 or\n(((sum by (instance) (miner_power_target_w{type=\"current\"}) or sum by (instance) (miner_power{type=\"estimated\"})) / on (instance) group_left(model) (sum by (instance) (rate(stratum_accepted_shares_counter{}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata)) < 1e12)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{model}}",
+          "refId": "MaxEff"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "avg by (model)\n((((sum by (instance) (miner_power_target_w{type=\"current\"}) or sum by (instance) (miner_power{type=\"estimated\"})) / on (instance) group_left(model) (sum by (instance) (rate(hashboard_shares{}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata)) < 1e12 or\n(((sum by (instance) (miner_power_target_w{type=\"current\"}) or sum by (instance) (miner_power{type=\"estimated\"})) / on (instance) group_left(model) (sum by (instance) (rate(stratum_accepted_shares_counter{}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata)) < 1e12)",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{model}}",
+          "refId": "AvgEff"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count by (model)\n((((sum by (instance) (miner_power_target_w{type=\"current\"}) or sum by (instance) (miner_power{type=\"estimated\"})) / on (instance) group_left(model) (sum by (instance) (rate(hashboard_shares{}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata)) or\n(((sum by (instance) (miner_power_target_w{type=\"current\"}) or sum by (instance) (miner_power{type=\"estimated\"})) / on (instance) group_left(model) (sum by (instance) (rate(stratum_accepted_shares_counter{}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata)))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{model}}",
+          "refId": "Count"
+        }
+      ],
+      "title": "Miner Efficiency (only BOS+)",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "model"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "instance 1": true,
+              "instance 2": true,
+              "instance 3": true
+            },
+            "indexByName": {
+              "Time 1": 4,
+              "Time 2": 6,
+              "Time 3": 8,
+              "Value #AvgEff": 1,
+              "Value #MaxEff": 3,
+              "Value #MinEff": 2,
+              "instance 1": 5,
+              "instance 2": 7,
+              "instance 3": 9,
+              "model": 0
+            },
+            "renameByName": {
+              "Time 1": "Time",
+              "Value #AvgEff": "AvgEff",
+              "Value #MaxEff": "MaxEff",
+              "Value #MinEff": "MinEff",
+              "instance 1": "",
+              "model": "Model"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "field": "AvgEff"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 94
+      },
+      "id": 32,
+      "panels": [],
+      "title": "Power Target (only BOS+)",
+      "type": "row"
+    },
+    {
+      "description": "Power target is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated (BOS+ only)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1984,11 +3174,12 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 8,
-        "x": 16,
-        "y": 38
+        "w": 12,
+        "x": 0,
+        "y": 95
       },
-      "id": 110,
+      "id": 45,
+      "links": [],
       "options": {
         "legend": {
           "calcs": [],
@@ -2000,7 +3191,6 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
@@ -2008,10 +3198,9 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "avg(max by (instance) (miner_power{type=\"limit\"}))",
-          "hide": false,
+          "expr": "avg(max by (instance) (miner_power_target_w{type=\"configured\",job=\"braiinsos-data\",label=~\"$label\"}) or max by (instance) (miner_power{type=\"limit\",job=\"braiinsos-data\",label=~\"$label\"}))",
           "interval": "",
-          "legendFormat": "Avg Temperature",
+          "legendFormat": "Avg Power Target",
           "refId": "A"
         },
         {
@@ -2020,10 +3209,10 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "max(max by (instance) (miner_power{type=\"limit\"}))",
+          "expr": "max(max by (instance) (miner_power_target_w{type=\"configured\",job=\"braiinsos-data\",label=~\"$label\"}) or max by (instance) (miner_power{type=\"limit\",job=\"braiinsos-data\",label=~\"$label\"}))",
           "hide": false,
           "interval": "",
-          "legendFormat": "Max Temperature",
+          "legendFormat": "Max Power Target",
           "refId": "B"
         },
         {
@@ -2032,18 +3221,18 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "min(max by (instance) (miner_power{type=\"limit\"}))",
+          "expr": "min(max by (instance) (miner_power_target_w{type=\"configured\",job=\"braiinsos-data\",label=~\"$label\"}) or max by (instance) (miner_power{type=\"limit\",job=\"braiinsos-data\",label=~\"$label\"}))",
           "hide": false,
           "interval": "",
-          "legendFormat": "Min Temperature",
+          "legendFormat": "Min Power Target",
           "refId": "C"
         }
       ],
-      "title": "Min, Avg, Max Power Limit",
+      "title": "Min, Avg, Max Power Target (only BOS+)",
       "type": "timeseries"
     },
     {
-      "description": "Number of instances that are scraped successfully (Up) or not (Down).",
+      "description": "Estimated power consumption in Watts and power target (only BOS+).",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2077,110 +3266,18 @@
               "mode": "off"
             }
           },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
               },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 0,
-        "y": 45
-      },
-      "id": 115,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": true,
-          "expr": "count_values(\"Status\",up{job!=\"prometheus\"})",
-          "interval": "",
-          "legendFormat": "{{Status}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Prometheus Status",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "1",
-            "renamePattern": "Up"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "0",
-            "renamePattern": "Down"
-          }
-        }
-      ],
-      "type": "timeseries"
-    },
-    {
-      "description": "Tuner Status - in case of per-hashboard tuning, maximum status is used.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
+              "type": "special"
             }
-          },
-          "links": [],
-          "mappings": [],
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -2193,17 +3290,18 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "watt"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 45
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 95
       },
-      "id": 116,
+      "id": 43,
       "options": {
         "legend": {
           "calcs": [],
@@ -2222,138 +3320,25 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "count_values(\"TunerStatus\", max by(instance) (tuner_stage))",
+          "expr": "sum(miner_power_target_w{type=\"current\",job=\"braiinsos-data\",label=~\"$label\"}) or sum(miner_power{type=\"estimated\",job=\"braiinsos-data\",label=~\"$label\"})",
           "interval": "",
-          "legendFormat": "{{TunerStatus}}",
+          "legendFormat": "Estimated Power",
           "refId": "A"
-        }
-      ],
-      "title": "Tuner Status",
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "2",
-            "renamePattern": "Testing Profile"
-          }
         },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "3",
-            "renamePattern": "Tuning Chips"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "4",
-            "renamePattern": "Stable"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "5",
-            "renamePattern": "Failed Tuner"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "6",
-            "renamePattern": "Manual Config"
-          }
-        }
-      ],
-      "type": "timeseries"
-    },
-    {
-      "description": "Dead Pools",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 45
-      },
-      "id": 127,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "count_values(\"Status\", client_status < 0) by(host)",
+          "expr": "sum(miner_power_target_w{type=\"configured\",job=\"braiinsos-data\",label=~\"$label\"}) or sum(miner_power{type=\"limit\",job=\"braiinsos-data\",label=~\"$label\"})",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{host}}",
-          "refId": "A"
+          "legendFormat": "Power Target",
+          "refId": "B"
         }
       ],
-      "title": "Dead Pools",
-      "transformations": [],
+      "title": "Power Target & Est. Consumption (W)",
       "type": "timeseries"
     },
     {
@@ -2362,67 +3347,63 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 53
+        "y": 102
       },
-      "id": 79,
+      "id": 159,
       "panels": [],
-      "title": "Details",
+      "title": "Users",
       "type": "row"
     },
     {
+      "description": "Hashrate by pool user",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-RdYlGr"
           },
-          "mappings": [],
+          "displayName": "${__series.name}",
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "List of Miners Per User",
+              "url": "d/sp8gIgNVz/drill-down-user-instance?var-User=${__series.name}"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "semi-dark-purple",
                 "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 80
-              },
-              {
-                "color": "red",
-                "value": 90
               }
             ]
-          }
+          },
+          "unit": "GHs"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last *"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#F2495C",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 14,
-        "w": 5,
+        "h": 5,
+        "w": 12,
         "x": 0,
-        "y": 54
+        "y": 103
       },
-      "id": 101,
+      "id": 161,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
+        "displayMode": "lcd",
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -2431,7 +3412,7 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showUnfilled": true
       },
       "pluginVersion": "8.4.0",
       "targets": [
@@ -2440,32 +3421,40 @@
             "type": "prometheus",
             "uid": "PABF2E7BD7AE7B0F4"
           },
-          "exemplar": true,
-          "expr": "count by (model)(miner_metadata)",
-          "instant": false,
+          "exemplar": false,
+          "expr": "sort_desc(sum by (user) (\nsum by(instance,user) (rate(stratum_accepted_shares_counter{connection_type=\"user\"}[$interval])) * 2^32 / 1e9\nor\nsum by (instance,user) (((average_hashrate_last_5_sec_ghs * on(instance) group_right() (client_status{connection_type=\"user\"}==1))))\n))",
+          "instant": true,
           "interval": "",
-          "legendFormat": "{{ model }}",
+          "legendFormat": "{{user}}",
           "refId": "A"
         }
       ],
-      "title": "Miners count by model",
-      "transformations": [],
-      "type": "stat"
+      "title": "Hashrate by User",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "braiinsos-data",
+            "renamePattern": "BOS+"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "metrics-exporter",
+            "renamePattern": "Stock FW"
+          }
+        }
+      ],
+      "type": "bargauge"
     },
     {
-      "description": "Power Limit of Miners",
+      "description": "Actual no. of devices per user. *BOS+* has a feature to \"slice\" a miner into pool groups, so that it is possible to mine on multiple users in the same time. The miner has to mining.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-BlPu"
           },
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "",
-              "url": "d/9kaMAdynz/drill-down-power-limit-instance?var-power_limit=${__series.name}&${queryparam}"
-            }
-          ],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -2473,34 +3462,35 @@
               {
                 "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
-          }
+          },
+          "unit": "locale"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
-        "w": 3,
-        "x": 5,
-        "y": 54
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 103
       },
-      "id": 90,
+      "id": 162,
       "options": {
-        "colorMode": "none",
-        "graphMode": "area",
+        "colorMode": "background",
+        "graphMode": "none",
         "justifyMode": "auto",
-        "orientation": "horizontal",
+        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
           "fields": "",
           "values": false
-        },
-        "text": {
-          "titleSize": 14,
-          "valueSize": 14
         },
         "textMode": "value_and_name"
       },
@@ -2511,29 +3501,139 @@
             "type": "prometheus",
             "uid": "PABF2E7BD7AE7B0F4"
           },
-          "exemplar": true,
-          "expr": "count_values (\"PowerLimit\", max by (instance) (miner_power{type=\"limit\"}))",
+          "exemplar": false,
+          "expr": "sort_desc(count by (user) (\nsum by(instance,user) (rate(stratum_accepted_shares_counter{connection_type=\"user\"}[$interval])) * 2^32 / 1e9 > 0\nor\nsum by (instance,user) (((average_hashrate_last_5_sec_ghs * on(instance) group_right() (client_status{connection_type=\"user\"}==1)))) > 0\n))",
+          "instant": true,
           "interval": "",
-          "legendFormat": "{{PowerLimit}}",
+          "legendFormat": "{{user}}",
           "refId": "A"
         }
       ],
-      "title": "Power Limit",
+      "title": "Actual Number of Mining Devices per User",
       "type": "stat"
     },
     {
+      "description": "Hashrate per user, *BOS+* devices are taking into account only accpeted shares. *Stock FW* devices are taking in to account all shares since cgminer API doesn't provide invalid/rejected shares. ",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "",
-              "url": "d/uZT-Tds7z/drill-down-os-version-instance?var-os_version=${__series.name}&${data_source:queryparam}"
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
-          ],
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "GHs"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 108
+      },
+      "id": 157,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": true,
+          "expr": "sum by (user) (\nsum by(instance,user) (rate(stratum_accepted_shares_counter{connection_type=\"user\"}[$interval])) * 2^32 / 1e9\nor\nsum by (instance,user) (((average_hashrate_last_5_sec_ghs * on(instance) group_right() (client_status{connection_type=\"user\"}==1))))\n)",
+          "interval": "",
+          "legendFormat": "{{user}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Hashrate per User",
+      "type": "timeseries"
+    },
+    {
+      "description": "No. of devices per user. *BOS+* has a feature to \"slice\" a miner into pool groups, so that it is possible to mine on multiple users at the same time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -2543,36 +3643,29 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "locale"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 6,
-        "x": 8,
-        "y": 54
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 108
       },
-      "id": 105,
+      "id": 160,
       "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
         },
-        "text": {
-          "titleSize": 14,
-          "valueSize": 14
-        },
-        "textMode": "auto"
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
       },
-      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -2580,22 +3673,105 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": true,
-          "expr": "count by (os_version) (miner_metadata)",
+          "expr": "count by (user) (\nsum by(instance,user) (rate(stratum_accepted_shares_counter{connection_type=\"user\"}[$interval])) * 2^32 / 1e9\nor\nsum by (instance,user) (((average_hashrate_last_5_sec_ghs * on(instance) group_right() (client_status{connection_type=\"user\"}==1))))\n)",
           "interval": "",
-          "legendFormat": "{{os_version}}",
+          "legendFormat": "{{user}}",
           "refId": "A"
         }
       ],
-      "title": "OS Version",
-      "type": "stat"
+      "title": "Number of Devices per User",
+      "type": "timeseries"
     }
   ],
-  "refresh": "",
+  "refresh": "1m",
   "schemaVersion": 35,
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allValue": "",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "definition": "label_values(job)",
+        "description": "Firmware - braiinsos-data stands for the BOS+ and metrics-exporter stands for the stock FW",
+        "hide": 0,
+        "includeAll": true,
+        "label": "OS",
+        "multi": false,
+        "name": "OS",
+        "options": [],
+        "query": {
+          "query": "label_values(job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/^(?!.*prometheus$).*$/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "definition": "label_values(client_status, label)",
+        "description": "Name of the IP range. In this example case, the IP range represents building.",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Building",
+        "multi": false,
+        "name": "label",
+        "options": [],
+        "query": {
+          "query": "label_values(client_status, label)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "5m",
+          "value": "5m"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Interval",
+        "multi": false,
+        "name": "interval",
+        "options": [
+          {
+            "selected": false,
+            "text": "5m",
+            "value": "5m"
+          },
+          {
+            "selected": false,
+            "text": "10m",
+            "value": "10m"
+          },
+          {
+            "selected": false,
+            "text": "15m",
+            "value": "15m"
+          }
+        ],
+        "query": "5m,10m,15m",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
@@ -2604,7 +3780,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "Farm Dashboard",
-  "uid": "heklhjxnz",
-  "version": 2,
+  "uid": "X5qFFjI4z",
+  "version": 40,
   "weekStart": ""
 }

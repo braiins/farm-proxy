@@ -3,36 +3,50 @@ global:
 
 scrape_configs:
   - job_name: "prometheus"
-    scrape_interval: 5s
+    scrape_interval: 15s
     static_configs:
     - targets: ["localhost:9090"]
 
-  - job_name: "node"
-    static_configs:
-    - targets: ["localhost:9100"]
+#  - job_name: "node"
+#    static_configs:
+#    - targets: ["localhost:9100"]
 
   - job_name: "farm-proxy"
     metrics_path: "/metrics"
     static_configs:
       - targets: ["localhost:8080"]
 
-  # Automatic discovery job - this is suitable for automatically keeping a list of large
-  # numbers of miners. See the file supercronic/scan_crontab on how to specify the IP
-  # ranges to be scanned. Each scanned IP range produces a file. Its name is currently assigned
-  # to label building dynamically.
+  - job_name: "metrics-exporter"
+    metrics_path: "/metrics"
+    honor_labels: true
+    scrape_interval: 1m
+    static_configs:
+      - targets: ["localhost:8081"]
+    metric_relabel_configs:
+      # The following is optional. Useful if you manage your farm by using
+      # subnets.
+      # Extract the site ID (second octet of IPv4 address)
+      - source_labels: ["instance"]
+        regex: "\\d+\\.(\\d+)\\.\\d+\\.\\d+.*"
+        target_label: "site_id"
+      # Extract the subnet ID (third octet of IPv4 address)
+      - source_labels: ["instance"]
+        regex: "\\d+\\.\\d+\\.(\\d+)\\.\\d+.*"
+        target_label: "subnet_id"
+      # Extract the host ID (last octet of IPv4 address)
+      - source_labels: ["instance"]
+        regex: "\\d+\\.\\d+\\.\\d+\\.(\\d+).*"
+        target_label: "host_id"
+
   - job_name: 'braiinsos-data'
     metrics_path: '/metrics'
-    scrape_interval: 5s
+    scrape_interval: 1m
     file_sd_configs:
       - files:
         # read all files written by ssh_scan.sh
-        - /mnt/miners_*.json
-        refresh_interval: 15s
+        - /mnt/bos_miners.json
+        refresh_interval: 30s
     relabel_configs:
-      # Add file name as a label
-      - source_labels: ["__meta_filepath"]
-        regex: "\\/mnt\\/miners_(.+?)\\.json.*"
-        target_label: "building"
       # Get rid of port in address
       - source_labels: ["__address__"]
         regex: "^(.+?):.*"
@@ -59,5 +73,10 @@ scrape_configs:
       # all the data. Make sure you really need these metrics and your storage size is
       # appropriate.
       - source_labels: [ __name__ ]
-        regex: 'client_generated_work|client_order|client_start_total|client_stop_total|dangerous_temperature|fan_rpm_feedback|hashboard_power|hashboard_temperature|hot_temperature|chips_discovered|chips_expected|process_cpu_seconds_total|process_max_fds|process_open_fds|process_resident_memory_bytes|process_start_time_seconds|process_threads|process_virtual_memory_bytes|stratum_job_counter|stratum_last_difficulty|stratum_request_duration_bucket|stratum_request_duration_count|stratum_request_duration_sum|tuner_iteration'
+        regex: 'client_generated_work|client_order|client_start_total|client_stop_total|dangerous_temperature|hashboard_power|hashboard_temperature|hot_temperature|chips_discovered|chips_expected|process_cpu_seconds_total|process_max_fds|process_open_fds|process_resident_memory_bytes|process_start_time_seconds|process_threads|process_virtual_memory_bytes|stratum_job_counter|stratum_last_difficulty|stratum_request_duration_bucket|stratum_request_duration_count|stratum_request_duration_sum|tuner_iteration'
         action: drop
+      # Rename nominal HR to meet the same name as for stock FW
+      - source_labels: [__name__]
+        regex: "hashboard_nominal_hashrate_gigahashes_per_second"
+        target_label: __name__
+        replacement: "hashboard_nominal_hashrate_ghs"

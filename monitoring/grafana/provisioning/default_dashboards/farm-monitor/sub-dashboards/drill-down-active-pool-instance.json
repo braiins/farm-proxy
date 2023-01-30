@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 40,
-  "iteration": 1658392155498,
+  "id": 5,
+  "iteration": 1669993106297,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -35,7 +35,8 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "displayMode": "auto",
+            "filterable": true
           },
           "mappings": [],
           "thresholds": {
@@ -60,102 +61,14 @@
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 108
-              },
-              {
                 "id": "links",
                 "value": [
                   {
                     "targetBlank": true,
-                    "title": "",
-                    "url": "http://${__series.name}"
+                    "title": "Go to miner",
+                    "url": "http://${__data.fields.Miner}"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Building"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 97
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Site"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 60
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Subnet"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 73
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Protocol"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 128
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "User"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 114
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Time"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 185
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Worker"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 200
               }
             ]
           }
@@ -187,7 +100,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "client_status{host=\"$host\", connection_type=\"user\"} > 0",
+          "expr": "client_status{host=~\"$host\", connection_type=\"user\"} > 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -205,32 +118,33 @@
               "__name__": true,
               "client_id": true,
               "connection_type": true,
-              "host": true,
+              "host": false,
               "host_id": true,
               "job": true
             },
             "indexByName": {
-              "Time": 13,
-              "Value": 14,
+              "Time": 12,
+              "Value": 13,
               "__name__": 4,
-              "building": 0,
-              "client_id": 5,
-              "connection_type": 6,
-              "host": 7,
-              "host_id": 8,
+              "connection_type": 5,
+              "host": 6,
+              "host_id": 7,
               "instance": 3,
-              "job": 9,
-              "protocol": 10,
+              "job": 8,
+              "label": 0,
+              "protocol": 9,
               "site_id": 1,
               "subnet_id": 2,
-              "user": 11,
-              "worker": 12
+              "user": 10,
+              "worker": 11
             },
             "renameByName": {
               "Time": "Time",
               "Value": "",
               "building": "Building",
+              "host": "Host",
               "instance": "Miner",
+              "label": "Building",
               "protocol": "Protocol",
               "site_id": "Site",
               "subnet_id": "Subnet",
@@ -257,7 +171,7 @@
         },
         "definition": "label_values(host)",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "Host",
         "multi": false,
         "name": "host",
@@ -282,6 +196,6 @@
   "timezone": "",
   "title": "Drill-Down (Active Pool --> Instance)",
   "uid": "bflmpsvz",
-  "version": 2,
+  "version": 5,
   "weekStart": ""
 }

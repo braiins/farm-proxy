@@ -21,13 +21,13 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 14,
-  "iteration": 1658389970170,
+  "id": 9,
+  "iteration": 1669993467683,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "description": "",
+      "description": "*BOS+* or *stock firmware*. Device ID available only for BOS+.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -58,45 +58,13 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Building"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 139
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Site"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 113
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Subnet"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 85
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "Miner"
             },
             "properties": [
+              {
+                "id": "custom.hidden",
+                "value": false
+              },
               {
                 "id": "links",
                 "value": [
@@ -108,12 +76,38 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "OS"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "braiinsos-data": {
+                        "index": 0,
+                        "text": "BOS+"
+                      },
+                      "metrics-exporter": {
+                        "index": 1,
+                        "text": "Stock FW"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       "gridPos": {
-        "h": 20,
-        "w": 14,
+        "h": 16,
+        "w": 23,
         "x": 0,
         "y": 0
       },
@@ -126,8 +120,7 @@
           ],
           "show": false
         },
-        "showHeader": true,
-        "sortBy": []
+        "showHeader": true
       },
       "pluginVersion": "8.4.0",
       "targets": [
@@ -137,45 +130,58 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "tuner_stage == $tuner_stage",
-          "format": "table",
+          "expr": "miner_metadata{job=~\"$os_type\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Instances With Given Tuner Stage",
+      "title": "OS Type",
       "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "labelsToFields": true,
+            "reducers": [
+              "last"
+            ]
+          }
+        },
         {
           "id": "organize",
           "options": {
             "excludeByName": {
               "Field": true,
-              "Last *": true,
-              "Value": true,
+              "Last": true,
               "__name__": true,
-              "hashboard": true,
+              "fw": true,
               "host_id": true,
-              "job": true
+              "site_id": true,
+              "subnet_id": true
             },
             "indexByName": {
-              "Field": 0,
-              "Last *": 9,
-              "__name__": 1,
-              "building": 2,
-              "hashboard": 5,
-              "host_id": 6,
-              "instance": 7,
-              "job": 8,
-              "site_id": 3,
-              "subnet_id": 4
+              "Field": 6,
+              "Last": 12,
+              "__name__": 7,
+              "device_id": 0,
+              "fw": 11,
+              "host_id": 8,
+              "instance": 1,
+              "job": 4,
+              "label": 2,
+              "model": 3,
+              "os_version": 5,
+              "site_id": 9,
+              "subnet_id": 10
             },
             "renameByName": {
-              "building": "Building",
+              "device_id": "Device ID",
               "instance": "Miner",
-              "site_id": "Site",
-              "subnet_id": "Subnet"
+              "job": "OS",
+              "label": "Building",
+              "model": "Model",
+              "os_version": "OS Version"
             }
           }
         }
@@ -192,50 +198,26 @@
       {
         "current": {
           "selected": false,
-          "text": "4",
-          "value": "4"
+          "text": "All",
+          "value": "$__all"
         },
+        "definition": "label_values(job)",
+        "description": "Firmware - braiinsos-data stands for the BOS+ and metrics-exporter stands for the stock FW",
         "hide": 0,
-        "includeAll": false,
-        "label": "Tuner Stage",
+        "includeAll": true,
+        "label": "OS",
         "multi": false,
-        "name": "tuner_stage",
-        "options": [
-          {
-            "selected": false,
-            "text": "1",
-            "value": "1"
-          },
-          {
-            "selected": false,
-            "text": "2",
-            "value": "2"
-          },
-          {
-            "selected": false,
-            "text": "3",
-            "value": "3"
-          },
-          {
-            "selected": true,
-            "text": "4",
-            "value": "4"
-          },
-          {
-            "selected": false,
-            "text": "5",
-            "value": "5"
-          },
-          {
-            "selected": false,
-            "text": "6",
-            "value": "6"
-          }
-        ],
-        "query": "1,2,3,4,5,6",
-        "queryValue": "",
+        "name": "os_type",
+        "options": [],
+        "query": {
+          "query": "label_values(job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/^(?!.*prometheus$).*$/",
         "skipUrlSync": false,
-        "type": "custom"
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
@@ -245,8 +227,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Drill-Down (Stage --> Instance)",
-  "uid": "9ppW5Oy7z",
-  "version": 4,
+  "title": "Drill-Down (OS --> Instance)",
+  "uid": "GouhRHNVk",
+  "version": 2,
   "weekStart": ""
 }

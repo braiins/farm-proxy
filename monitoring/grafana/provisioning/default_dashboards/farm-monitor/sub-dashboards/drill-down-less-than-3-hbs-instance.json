@@ -21,7 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 7,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -57,10 +57,6 @@
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 146
-              },
-              {
                 "id": "links",
                 "value": [
                   {
@@ -69,114 +65,6 @@
                     "url": "http://${__value.text}"
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Time"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 247
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "os_version"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 102
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Subnet"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 83
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Building"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 112
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Site"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 74
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Device ID"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 183
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Model"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 179
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "OS Version"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 319
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Hashboards"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 117
               }
             ]
           }
@@ -208,7 +96,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "miner_metadata * on (instance) group_left() (count by (instance) (rate(hashboard_shares{type=\"valid\"}[20s]) > 0) < 3) ",
+          "expr": "miner_metadata * on (instance) group_left() (count by (instance) (rate(hashboard_shares{type=\"valid\"}[5m]) > 0) < 3) ",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -255,21 +143,22 @@
               "Time 2": 11,
               "Value #A": 10,
               "Value #B": 12,
-              "building": 0,
               "device_id": 5,
               "host_id": 6,
               "instance": 3,
               "job": 7,
+              "label": 2,
               "model": 8,
               "os_version": 9,
-              "site_id": 1,
-              "subnet_id": 2
+              "site_id": 0,
+              "subnet_id": 1
             },
             "renameByName": {
               "Value #B": "Hashboards",
               "building": "Building",
               "device_id": "Device ID",
               "instance": "Miner",
+              "label": "Building",
               "model": "Model",
               "os_version": "OS Version",
               "site_id": "Site",
@@ -289,7 +178,7 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},

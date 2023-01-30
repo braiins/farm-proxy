@@ -1,0 +1,278 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 4,
+  "iteration": 1669993561591,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "description": "Actual number of devices per user. *BOS+* has a feature to \"slice\" a miner into pool groups, so that it is possible to mine on multiple users in the same time.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": true
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Hashrate"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "GHs"
+              },
+              {
+                "id": "noValue",
+                "value": "-"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Miner"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Go to miner",
+                    "url": "http://${__data.fields.Miner}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Firmware"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "braiinsos-data": {
+                        "index": 0,
+                        "text": "BOS+"
+                      },
+                      "metrics-exporter": {
+                        "index": 1,
+                        "text": "Stock FW"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 24,
+        "w": 15,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 0,
+        "showHeader": true
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "client_status{connection_type=\"user\",user=~\"$User\"} == 1",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "ClientStatus"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "sum by(instance) (rate(stratum_accepted_shares_counter{connection_type=\"user\",user=~\"$User\"}[1m])) * 2^32 / 1e9\nor\nsum by (instance) (((average_hashrate_last_5_sec_ghs * on(instance) group_right() (client_status{connection_type=\"user\",user=~\"$User\"}==1))))",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "Hashrate"
+        }
+      ],
+      "title": "List of Miners Per User",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "instance"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "Value": false,
+              "Value #ClientStatus": true,
+              "__name__": true,
+              "client_id": true,
+              "connection_type": true,
+              "host": true,
+              "host_id": true,
+              "job": false,
+              "protocol": true,
+              "site_id": true,
+              "subnet_id": true,
+              "worker": true
+            },
+            "indexByName": {
+              "Time 1": 8,
+              "Time 2": 6,
+              "Value #ClientStatus": 16,
+              "Value #Hashrate": 3,
+              "__name__": 9,
+              "client_id": 10,
+              "connection_type": 13,
+              "host": 14,
+              "host_id": 11,
+              "instance": 1,
+              "job": 5,
+              "label": 4,
+              "protocol": 15,
+              "site_id": 7,
+              "subnet_id": 12,
+              "user": 0,
+              "worker": 2
+            },
+            "renameByName": {
+              "Time 1": "",
+              "Time 2": "Time",
+              "Value #Hashrate": "Hashrate",
+              "instance": "Miner",
+              "job": "Firmware",
+              "label": "Building",
+              "user": "User",
+              "worker": "Worker"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": false,
+                "field": "User"
+              }
+            ]
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 35,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "definition": "label_values(user)",
+        "description": "Pool User",
+        "hide": 0,
+        "includeAll": true,
+        "label": "user",
+        "multi": false,
+        "name": "User",
+        "options": [],
+        "query": {
+          "query": "label_values(user)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Drill-Down (User --> Instance)",
+  "uid": "sp8gIgNVz",
+  "version": 3,
+  "weekStart": ""
+}

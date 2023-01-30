@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
-  "iteration": 1658386639859,
+  "id": 3,
+  "iteration": 1669993476592,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -34,15 +34,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "displayMode": "auto",
+            "filterable": true
           },
-          "links": [
-            {
-              "targetBlank": true,
-              "title": "",
-              "url": "http://${__value.text}"
-            }
-          ],
+          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -62,119 +57,52 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "client_id"
+              "options": "Miner"
             },
             "properties": [
               {
                 "id": "custom.hidden",
-                "value": true
+                "value": false
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Go to the miner",
+                    "url": "http://${__value.text}"
+                  }
+                ]
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "__name__"
+              "options": "OS"
             },
             "properties": [
               {
                 "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "connection_type"
-            },
-            "properties": [
+                "value": false
+              },
               {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "host"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "host_id"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "site_id"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "subnet_id"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Field"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "braiinsos-data": {
+                        "index": 0,
+                        "text": "BOS+"
+                      },
+                      "metrics-exporter": {
+                        "index": 1,
+                        "text": "Stock FW"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
               }
             ]
           }
@@ -205,7 +133,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "miner_metadata{os_version=\"$os_version\"}",
+          "expr": "miner_metadata{os_version=~\"$os_version\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -222,6 +150,42 @@
               "last"
             ]
           }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field": true,
+              "Last": true,
+              "__name__": true,
+              "fw": true,
+              "host_id": true,
+              "site_id": true,
+              "subnet_id": true
+            },
+            "indexByName": {
+              "Field": 0,
+              "Last": 11,
+              "__name__": 1,
+              "device_id": 2,
+              "host_id": 3,
+              "instance": 4,
+              "job": 5,
+              "label": 7,
+              "model": 8,
+              "os_version": 6,
+              "site_id": 9,
+              "subnet_id": 10
+            },
+            "renameByName": {
+              "device_id": "Device ID",
+              "instance": "Miner",
+              "job": "OS",
+              "label": "Building",
+              "model": "Model",
+              "os_version": "OS Version"
+            }
+          }
         }
       ],
       "type": "table"
@@ -235,13 +199,13 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": "2022-04-05-0-ddf6a75b-22.04-plus-nightly",
-          "value": "2022-04-05-0-ddf6a75b-22.04-plus-nightly"
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
         },
         "definition": "label_values(os_version)",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "OS Version",
         "multi": false,
         "name": "os_version",
@@ -266,6 +230,6 @@
   "timezone": "",
   "title": "Drill-Down (OS Version --> Instance)",
   "uid": "uZT-Tds7z",
-  "version": 4,
+  "version": 6,
   "weekStart": ""
 }

@@ -1,0 +1,28 @@
+# scraping internal for stock FW devices, scraping interval for BOS+ devices is defined in the monitoring/promethus/prometheus.yml (default is also 1m)
+[scraping]
+stock_fw_scrape_interval = "1m"
+
+# ranges needs to be defined by user, name of the ranges is then used as Prometheus label
+# naming is arbitrary
+# number of ranges is also arbitrary
+[ranges]
+building_A = ["1.2.3.*"]
+building_B = ["1.2.10-50.3"]
+
+# credentials needed only for http API, cgminer API doesn't require credentials
+# default credentials are root/root, if the user is using another credentials, it has to be edited and uncommented here
+#[credentials]
+#username = "root"
+#password = "root"
+
+[advanced]
+# interval for scanning period
+scan_interval = "5m"
+# timeout interval for scanning
+scan_timeout = "15s"
+# maximal number of parrallel scan requests
+scan_max_concurrency = 1000
+# timeout interval for scraping stock FW devices
+stock_fw_scrape_timeout = "5s"
+# maximal number of parrallel scrape requests for stock FW devices
+stock_fw_scrape_max_concurrency = 40000

@@ -1,0 +1,272 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 14,
+  "iteration": 1669993415430,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "description": "List of miners by miner model. Device ID available only for *BOS+*",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": true
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Efficiency"
+            },
+            "properties": [
+              {
+                "id": "noValue",
+                "value": "-"
+              },
+              {
+                "id": "unit",
+                "value": "W/THs"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Miner"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Go to the miner",
+                    "url": "http://${__value.text}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Hashrate"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "GHs"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 23,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Efficiency"
+          }
+        ]
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "miner_metadata{model=\"$miner_model\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "MinerMetadata"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "(((sum by (instance) (miner_power_target_w{type=\"current\"}) or sum by (instance) (miner_power{type=\"estimated\"})) / on (instance) group_left(model) (sum by (instance) (rate(hashboard_shares{}[5m])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata{model=~\"$miner_model\"})) < 1e12 or\n(((sum by (instance) (miner_power_target_w{type=\"current\"}) or sum by (instance) (miner_power{type=\"estimated\"})) / on (instance) group_left(model) (sum by (instance) (rate(stratum_accepted_shares_counter{}[5m])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata{model=~\"$miner_model\"})) < 1e12",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "Efficiency"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "    sum by (instance) (miner_metadata{model=\"$miner_model\"} + on(instance) group_right(model) rate(hashboard_shares{}[5m])) * 2^32 / 1e9 or\n    sum by (instance) (miner_metadata{model=\"$miner_model\"} + on(instance) group_right(model) rate(stratum_accepted_shares_counter{}[5m])) * 2^32 / 1e9 or\n    sum by (instance) (miner_metadata{model=\"$miner_model\"} + on(instance) group_right(model) (average_hashrate_last_5_sec_ghs{}))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "Hashrate"
+        }
+      ],
+      "title": "Miner Efficiency",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "instance"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Value #MinerMetadata": true,
+              "__name__": true,
+              "host_id": true,
+              "job": true,
+              "model 2": true,
+              "site_id": true,
+              "subnet_id": true
+            },
+            "indexByName": {
+              "Time 1": 7,
+              "Time 2": 14,
+              "Time 3": 16,
+              "Value #Efficiency": 2,
+              "Value #Hashrate": 3,
+              "Value #MinerMetadata": 13,
+              "__name__": 8,
+              "device_id": 0,
+              "host_id": 9,
+              "instance": 1,
+              "job": 10,
+              "label": 6,
+              "model 1": 4,
+              "model 2": 15,
+              "os_version": 5,
+              "site_id": 11,
+              "subnet_id": 12
+            },
+            "renameByName": {
+              "Time 1": "Time",
+              "Value": "Efficiency",
+              "Value #Efficiency": "Efficiency",
+              "Value #Hashrate": "Hashrate",
+              "device_id": "Device ID",
+              "instance": "Miner",
+              "job": "",
+              "label": "Building",
+              "model": "Model",
+              "model 1": "Model",
+              "os_version": "OS Version",
+              "subnet_id": ""
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "",
+  "schemaVersion": 35,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "definition": "label_values(model)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Miner Model",
+        "multi": false,
+        "name": "miner_model",
+        "options": [],
+        "query": {
+          "query": "label_values(model)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Drill-Down (Miner Efficiency --> Instance)",
+  "uid": "7ShdZZN4z",
+  "version": 6,
+  "weekStart": ""
+}

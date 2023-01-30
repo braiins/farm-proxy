@@ -5,14 +5,14 @@ volumes:
   scanner_data: {}
 services:
   farm-proxy:
-    image: braiinssystems/farm-proxy:22.11 # Will be replaced with braiinssystems/farm-proxy:TAG upon public release
+    image: braiinssystems/farm-proxy:23.01 # Will be replaced with braiinssystems/farm-proxy:TAG upon public release
     container_name: farm-proxy
     network_mode: "host"
     volumes:
       - "./config/sample.toml:/conf/farm_proxy.toml"
     environment:
       - CONF_PATH=/conf/farm_proxy.toml
-      - RUST_LOG=debug
+      - RUST_LOG=info
       - RUST_BACKTRACE=full
     restart: unless-stopped
     logging:
@@ -21,16 +21,18 @@ services:
         max-size: "100m"
         max-file: "50"
         compress: "true"
-  # boscanner scans the network on port 8081 to find miners with BOS+ for the farm-monitor client_dashboard
-  # more info about farm monitor is provided in official doc https://docs.braiins.com/os/plus-en/Monitoring%20Braiins%20OS%2B%20with%20Prometheus%20and%20Grafana/index_monitoring.html
-  # support for miners with stock FW will be addded soon
-  bos_scanner:
-    image: braiinssystems/bos_monitor:v1.0.1
-    container_name: bos_scanner
-    volumes:
-      - ./scan_crontab:/usr/local/share/scan_crontab
-      - scanner_data:/mnt:rw
+  # metrics-exporter is a program, which performs device discovery on the defined network and pulls data from miners running a Stock FW. As a result, those data can be digested by Prometheus and visualized in Grafana dashboard, see dashboard "Farm Dashboard"
+  metrics-exporter:
+    image: braiinssystems/farm-monitor:23.01
+    container_name: metrics-exporter
     network_mode: "host"
+    volumes:
+      - ./monitoring/metrics-exporter:/etc/metrics-exporter
+      - scanner_data:/mnt:rw
+    command:
+      - '--config=/etc/metrics-exporter/metrics-exporter.toml'
+      - '--sd-file=/mnt/bos_miners.json'
+    restart: unless-stopped
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -82,6 +84,8 @@ services:
     image: grafana/grafana:8.4.0
     container_name: grafana
     network_mode: "host"
+    depends_on:
+      - prometheus
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
