@@ -21,12 +21,11 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 13,
+  "id": 22,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -34,22 +33,59 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto",
+            "displayMode": "color-text",
             "filterable": true
           },
-          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
               }
             ]
           }
         },
         "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "License State"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "dark-yellow",
+                        "index": 0,
+                        "text": "None"
+                      },
+                      "1": {
+                        "color": "dark-yellow",
+                        "index": 1,
+                        "text": "Valid"
+                      },
+                      "2": {
+                        "color": "dark-red",
+                        "index": 2,
+                        "text": "Expired"
+                      },
+                      "3": {
+                        "color": "dark-red",
+                        "index": 3,
+                        "text": "Limited"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
           {
             "matcher": {
               "id": "byName",
@@ -61,8 +97,8 @@
                 "value": [
                   {
                     "targetBlank": true,
-                    "title": "Go to miner",
-                    "url": "http://${__value.text}"
+                    "title": "Go to the miner GUI",
+                    "url": "http://${__data.fields.Miner}"
                   }
                 ]
               }
@@ -71,7 +107,7 @@
         ]
       },
       "gridPos": {
-        "h": 25,
+        "h": 27,
         "w": 24,
         "x": 0,
         "y": 0
@@ -85,8 +121,7 @@
           ],
           "show": false
         },
-        "showHeader": true,
-        "sortBy": []
+        "showHeader": true
       },
       "pluginVersion": "9.5.1",
       "targets": [
@@ -96,73 +131,40 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "miner_metadata * on (instance) group_left() (count by (instance) (rate(hashboard_shares{type=\"valid\"}[5m]) > 0) < 3) ",
+          "expr": "(min by (instance) (license_state{job=\"braiinsos-data\"} == 1 and license_time_to_restricted_seconds < 150 * 60) \n+ on (instance) group_left(device_id, os_version) (miner_metadata) \n+ on (instance) group_left(contract_name, license_type) (license_details))\nor\n(min by (instance) (license_state{job=\"braiinsos-data\"} == 1 and license_time_to_restricted_seconds < 150 * 60) \n+ on (instance) group_left(device_id, os_version) (miner_metadata))",
           "format": "table",
           "instant": true,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{instance}",
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PABF2E7BD7AE7B0F4"
-          },
-          "exemplar": false,
-          "expr": "count by (instance) (rate(hashboard_shares{type=\"valid\"}[5m]) > 0) < 3",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "B"
         }
       ],
-      "title": "Less than 3 hbs",
+      "title": "Soon Expired Licenses",
       "transformations": [
-        {
-          "id": "seriesToColumns",
-          "options": {
-            "byField": "instance"
-          }
-        },
         {
           "id": "organize",
           "options": {
             "excludeByName": {
-              "Field": true,
-              "Last *": true,
-              "Time 1": true,
-              "Time 2": true,
-              "Value #A": true,
-              "host_id": true,
-              "job": true
+              "Time": true
             },
             "indexByName": {
-              "Time 1": 4,
-              "Time 2": 11,
-              "Value #A": 10,
-              "Value #B": 12,
-              "device_id": 5,
-              "host_id": 6,
-              "instance": 3,
-              "job": 7,
-              "label": 2,
-              "model": 8,
-              "os_version": 9,
-              "site_id": 0,
-              "subnet_id": 1
+              "Time": 0,
+              "Value": 3,
+              "contract_name": 4,
+              "devfee": 5,
+              "device_id": 1,
+              "instance": 2,
+              "license_type": 6,
+              "os_version": 7
             },
             "renameByName": {
-              "Value #B": "Hashboards",
-              "building": "Building",
+              "Value": "License State",
+              "contract_name": "Contract Name",
+              "devfee": "Devfee",
               "device_id": "Device ID",
               "instance": "Miner",
-              "label": "Building",
-              "model": "Model",
-              "os_version": "OS Version",
-              "site_id": "Site",
-              "subnet_id": "Subnet"
+              "license_type": "License Type",
+              "os_version": "BOS+ Version"
             }
           }
         }
@@ -170,7 +172,6 @@
       "type": "table"
     }
   ],
-  "refresh": "",
   "schemaVersion": 35,
   "style": "dark",
   "tags": [],
@@ -183,8 +184,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Drill-Down (Less Than 3 HBs --> Instance)",
-  "uid": "rkP23dy7z",
-  "version": 3,
+  "title": "Drill-Down (Soon Expired License --> Instance)",
+  "uid": "S-TbaN-Vz",
+  "version": 6,
   "weekStart": ""
 }

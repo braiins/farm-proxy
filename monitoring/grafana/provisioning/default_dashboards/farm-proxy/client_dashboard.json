@@ -24,8 +24,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 19,
-  "iteration": 1674831221174,
+  "id": 16,
+  "iteration": 1683900037909,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -593,7 +593,7 @@
       },
       "id": 64,
       "options": {
-        "content": "Full documentatin is available in the [Braiins Academy](https://academy.braiins.com/en/farm-proxy/about) website",
+        "content": "Full documentation is available in the [Braiins Academy](https://academy.braiins.com/en/farm-proxy/about) website",
         "mode": "markdown"
       },
       "pluginVersion": "8.4.0",
@@ -1117,6 +1117,105 @@
         "x": 0,
         "y": 21
       },
+      "id": 68,
+      "panels": [
+        {
+          "description": "Overview of Brains OS+ licenses on devices connected to the Farm Proxy.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 5,
+            "w": 24,
+            "x": 0,
+            "y": 22
+          },
+          "id": 70,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "right"
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PABF2E7BD7AE7B0F4"
+              },
+              "exemplar": true,
+              "expr": "FP_license_prov_license_counts_by_state>0",
+              "interval": "",
+              "legendFormat": "{{contract_name}} ({{license_state}})",
+              "refId": "A"
+            }
+          ],
+          "type": "timeseries"
+        }
+      ],
+      "title": "BOS+ licenses",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
       "id": 57,
       "panels": [
         {
@@ -1191,7 +1290,7 @@
       "type": "row"
     }
   ],
-  "refresh": "5s",
+  "refresh": "30s",
   "schemaVersion": 35,
   "style": "dark",
   "tags": [],
@@ -1240,6 +1339,6 @@
   "timezone": "",
   "title": "Client Dashboard",
   "uid": "9UtNFCgVz",
-  "version": 3,
+  "version": 7,
   "weekStart": ""
 }

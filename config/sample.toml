@@ -6,8 +6,6 @@ name = "S1"
 port = 3336
 # Bonus related to devfee
 #slushpool_bos_bonus = "bosBonusUserName"
-# BOS referral code
-#bos_referral_code = "referralCode"
 
 [[target]]
 # Name of this target

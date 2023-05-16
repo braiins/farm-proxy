@@ -110,7 +110,7 @@ stock_fw_scrape_timeout = "5s"
 # maximal number of parallel scrape requests for stock FW devices
 stock_fw_scrape_max_concurrency = 40000
 ```
-### Braiins Farm Monitor Configutation
+### Braiins Farm Proxy Configutation
 Since Braiins Farm Proxy version 23.01, telemetry data are collected in order to be able to track technical issues, errors and future improvements of the application. In case the user doesn't want to send telemetry data to Braiins, he can opt out. Just add to the proxy configuration file following rows:
 
 ```

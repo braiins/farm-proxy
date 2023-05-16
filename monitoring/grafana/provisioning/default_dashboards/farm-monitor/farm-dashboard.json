@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -21,13 +24,16 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 13,
-  "iteration": 1669988558738,
+  "id": 14,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -36,15 +42,29 @@
       },
       "id": 20,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Overview",
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "**Nominal hashrate**: based on manufacturer data \\\n**Real hashrate**: measured hashrate based on 1m average \\\n*Click on the graph to see list of all devices* \\\nnote: nominal hashrate is not available for Antminers S9 with BOS+",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "fixedColor": "#8b7cff",
+            "mode": "thresholds"
           },
           "displayName": "${__series.name}",
           "links": [
@@ -57,15 +77,19 @@
           "mappings": [],
           "min": 0,
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
+                "color": "#f95355",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#cfdb5c",
+                "value": 30
+              },
+              {
+                "color": "#34c06a",
+                "value": 60
               }
             ]
           },
@@ -93,7 +117,9 @@
       },
       "id": 4,
       "options": {
-        "displayMode": "lcd",
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -104,7 +130,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -149,11 +175,16 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "**Discovered**: No. of discovered devices by the scanning procedure \\\n**Monitored**: No. of devices, which are *up* (~ miner is exposing any metric)\\\n**Mining**: No. of devices, which produced *some* hashrate in the last 5 minutes\\\n**Not Mining**: No. of devices, which produced *no* hashrate in the last 5 minutes \\\n**Offline**: No. of devices, which are *down* (~ miner is **not** exposing any metric)",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-BlPu"
+            "fixedColor": "#8b7cff",
+            "mode": "fixed"
           },
           "links": [
             {
@@ -200,7 +231,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "red",
+                  "fixedColor": "#f95355",
                   "mode": "fixed"
                 }
               }
@@ -215,6 +246,37 @@
               {
                 "id": "color",
                 "value": {
+                  "fixedColor": "#434343",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Discovered"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#39238f",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Monitored"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#5432cd",
                   "mode": "fixed"
                 }
               }
@@ -243,7 +305,7 @@
         },
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -315,6 +377,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Links to the *Braiins* product webpages",
       "gridPos": {
         "h": 5,
@@ -324,30 +390,57 @@
       },
       "id": 6,
       "options": {
-        "content": "<table width=\"100%\" style:\" border: none !important; table-layout: fixed; \" id=\"bps-table\">\n<tr>\n<td style=\"text-align: center; padding: 10px 0; width:50%;\"><a href=\"https://braiins.com/os/plus?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-os-plus-logo-reverse-rgb.svg?h=d35e19f3056bef1664b2c5cbde453a44\" height=\"25px\" align=\"center\"></a></td>\n<td style=\"text-align: center; padding: 10px 0; width:50%;\"><a href=\"https://braiins.com/pool\"  target=\"_blank\"><img src=\"https://braiins.visualbook.pro/assets/img/logos/braiins-pool-logo-reverse-rgb.svg\" height=\"25px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 10px 0;\"><a href=\"https://stratumprotocol.org/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/stratum-v2-logo-reverse-rgb.svg?h=77e94750d6f57e33cf70c51e07e5aac5\" height=\"14px\"></a></td>\n<td style=\"text-align: center; padding: 10px 0;\"><a href=\"https://insights.braiins.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-insights-logo-on-dark-background-rgb.svg?h=aad9d059abab45e38f162e05c1fa322f\" height=\"17px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 10px 0;\" colspan=\"2\"><a href=\"https://braiins.com/farm-proxy/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/farm-proxy-logo-white-rgb.svg?h=3e5188e1d46f58ccb0b910c6f8184b9b\" height=\"30px\"></a></td>\n</tr>\n</table>",
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "<table width=\"100%\" style:\" border: none !important; table-layout: fixed; \" id=\"bps-table\">\n<tr>\n<td style=\"text-align: center; padding: 10px 0; width:50%;\"><a href=\"https://braiins.com/os/plus?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-os-plus-logo-reverse-rgb.svg?h=d35e19f3056bef1664b2c5cbde453a44\" height=\"25px\" align=\"center\"></a></td>\n<td style=\"text-align: center; padding: 10px 0; width:50%;\"><a href=\"https://braiins.com/pool\"  target=\"_blank\"><img src=\"https://braiins.visualbook.pro/assets/img/logos/braiins-pool-logo-reverse-rgb.svg\" height=\"25px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 10px 0;\"><a href=\"https://stratumprotocol.org/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/stratum-v2-logo-reverse-rgb.svg?h=77e94750d6f57e33cf70c51e07e5aac5\" height=\"12px\"></a></td>\n<td style=\"text-align: center; padding: 10px 0;\"><a href=\"https://insights.braiins.com/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/braiins-insights-logo-on-dark-background-rgb.svg?h=aad9d059abab45e38f162e05c1fa322f\" height=\"16px\"></a></td>\n</tr>\n<tr>\n<td style=\"text-align: center; padding: 10px 0;\" colspan=\"2\"><a href=\"https://braiins.com/farm-proxy/?utm_source=Grafana&utm_medium=Dashboard_panel\"  target=\"_blank\" style=\"display:block\"><img src=\"https://design.braiins.com/assets/img/logos/farm-proxy-logo-white-rgb.svg?h=3e5188e1d46f58ccb0b910c6f8184b9b\" height=\"30px\"></a></td>\n</tr>\n</table>",
         "mode": "html"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Braiins Products",
       "type": "text"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "**Measured to calculated ratio**: real hashrate / nominal hashrate \\\nnote: MCR not available for Antminers S9 with BOS+",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "fixedColor": "#f2f2f2",
+            "mode": "thresholds"
           },
           "links": [],
           "mappings": [],
           "max": 1,
           "min": 0,
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
+                "color": "#f95355",
                 "value": null
+              },
+              {
+                "color": "#c063f9",
+                "value": 50
+              },
+              {
+                "color": "#8b7cff",
+                "value": 80
               }
             ]
           },
@@ -363,7 +456,9 @@
       },
       "id": 150,
       "options": {
-        "displayMode": "lcd",
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -374,7 +469,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -420,6 +515,10 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "gridPos": {
         "h": 5,
         "w": 8,
@@ -428,19 +527,37 @@
       },
       "id": 131,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "Farm Monitor guideline: [documentation](https://academy.braiins.com/en/farm-monitor/about)\n\n[Get support](https://help.braiins.com/en/support/tickets/new) from the Braiins team\n\n*Dashboard is interactive, most of the graphs redirect user to a detail after a click on the statistic/graph.*\n\nFarm Monitor displays only data from devices running on **BOS+** or **stock firmware** (Antminers X17 and X19). BOS+ exposes it's metrics on `ip-address:8081/metrics` and provides many more data then the stock firmware. Data from stock are pulled from cgminer API by **metrics-exporter** and then exposed on `host:8081/metrics` to be digested by Prometheus.",
         "mode": "markdown"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "TL;DR",
       "type": "text"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Hashrate by FW Type: BOS+ vs. Stock FW",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "displayName": "${__series.name}",
           "mappings": [
@@ -457,11 +574,15 @@
           ],
           "min": 0,
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "semi-dark-purple",
+                "color": "#170d3a",
                 "value": null
+              },
+              {
+                "color": "#8b7cff",
+                "value": 0
               }
             ]
           },
@@ -477,7 +598,9 @@
       },
       "id": 133,
       "options": {
-        "displayMode": "lcd",
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -488,7 +611,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -523,11 +646,16 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Discovered miners by FW type: *BOS+* vs. *Stock FW*",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-BlPu"
+            "fixedColor": "yellow",
+            "mode": "thresholds"
           },
           "links": [
             {
@@ -552,7 +680,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-purple",
+                "color": "#f4f4f4",
                 "value": null
               }
             ]
@@ -569,7 +697,7 @@
       },
       "id": 12,
       "options": {
-        "colorMode": "background",
+        "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "vertical",
@@ -582,7 +710,7 @@
         },
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -617,6 +745,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Maximal temperature from the monitored miners (chip/hashboard sensor measure) \\\n\\\n*note: temperatures > 200 C are filtered out because such values are nonsense (but they can appear in Stock FW when the miner has problems with fan detection)*",
       "fieldConfig": {
         "defaults": {
@@ -629,6 +761,7 @@
               "options": {
                 "match": "null+nan",
                 "result": {
+                  "color": "#525252",
                   "index": 0,
                   "text": "N/A"
                 }
@@ -640,15 +773,15 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-purple",
+                "color": "#13a454",
                 "value": null
               },
               {
-                "color": "orange",
+                "color": "#fe8431",
                 "value": 80
               },
               {
-                "color": "dark-red",
+                "color": "#d9222c",
                 "value": 90
               }
             ]
@@ -659,16 +792,16 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
+        "w": 3,
         "x": 0,
         "y": 11
       },
       "id": 10,
       "options": {
-        "colorMode": "value",
+        "colorMode": "none",
         "graphMode": "area",
         "justifyMode": "auto",
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -676,9 +809,12 @@
           "fields": "",
           "values": false
         },
+        "text": {
+          "valueSize": 34
+        },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -696,6 +832,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Average fan speed, available only for BOS+ devices.",
       "fieldConfig": {
         "defaults": {
@@ -708,6 +848,7 @@
               "options": {
                 "match": "null+nan",
                 "result": {
+                  "color": "#525252",
                   "index": 0,
                   "text": "N/A"
                 }
@@ -719,15 +860,15 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-purple",
+                "color": "#00bac5",
                 "value": null
               },
               {
-                "color": "orange",
+                "color": "#fe8431",
                 "value": 80
               },
               {
-                "color": "dark-red",
+                "color": "#d9222c",
                 "value": 90
               }
             ]
@@ -738,13 +879,13 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 4,
+        "w": 3,
+        "x": 3,
         "y": 11
       },
       "id": 14,
       "options": {
-        "colorMode": "value",
+        "colorMode": "none",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -755,9 +896,12 @@
           "fields": "",
           "values": false
         },
+        "text": {
+          "valueSize": 34
+        },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -775,6 +919,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Targeted power consumption of the farm (only BOS+)",
       "fieldConfig": {
         "defaults": {
@@ -786,6 +934,7 @@
               "options": {
                 "match": "null+nan",
                 "result": {
+                  "color": "#525252",
                   "index": 0,
                   "text": "N/A"
                 }
@@ -797,7 +946,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-purple",
+                "color": "#ee5884",
                 "value": null
               }
             ]
@@ -808,13 +957,13 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 4,
-        "x": 8,
+        "w": 3,
+        "x": 6,
         "y": 11
       },
       "id": 17,
       "options": {
-        "colorMode": "value",
+        "colorMode": "none",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -825,10 +974,12 @@
           "fields": "",
           "values": false
         },
-        "text": {},
+        "text": {
+          "valueSize": 34
+        },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -846,6 +997,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Estimated power consumption of the farm (only for BOS+ devices)",
       "fieldConfig": {
         "defaults": {
@@ -857,6 +1012,7 @@
               "options": {
                 "match": "null+nan",
                 "result": {
+                  "color": "#525252",
                   "index": 0,
                   "text": "N/A"
                 }
@@ -868,7 +1024,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-purple",
+                "color": "#fe8431",
                 "value": null
               }
             ]
@@ -880,12 +1036,12 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 12,
+        "x": 9,
         "y": 11
       },
       "id": 18,
       "options": {
-        "colorMode": "value",
+        "colorMode": "none",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -896,9 +1052,12 @@
           "fields": "",
           "values": false
         },
+        "text": {
+          "valueSize": 34
+        },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -917,17 +1076,23 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Average efficiency as *Watt / THs* (only for BOS+ devices)",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "#4b8aff",
+            "mode": "fixed"
           },
           "mappings": [
             {
               "options": {
                 "match": "null+nan",
                 "result": {
+                  "color": "#525252",
                   "index": 0,
                   "text": "N/A"
                 }
@@ -939,7 +1104,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-purple",
+                "color": "#6f6f6f",
                 "value": null
               }
             ]
@@ -951,12 +1116,12 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 15,
+        "x": 12,
         "y": 11
       },
       "id": 167,
       "options": {
-        "colorMode": "value",
+        "colorMode": "none",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -967,18 +1132,21 @@
           "fields": "",
           "values": false
         },
+        "text": {
+          "valueSize": 34
+        },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "PABF2E7BD7AE7B0F4"
           },
-          "exemplar": true,
+          "exemplar": false,
           "expr": "avg\n((((sum by (instance) (miner_power_target_w{type=\"current\",job=\"braiinsos-data\",label=~\"$label\"}) or sum by (instance) (miner_power{type=\"estimated\",job=\"braiinsos-data\",label=~\"$label\"})) / on (instance) group_left(model) (sum by (instance) (rate(hashboard_shares{job=\"braiinsos-data\",label=~\"$label\"}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata{job=\"braiinsos-data\",label=~\"$label\"})) < 1e12 or\n(((sum by (instance) (miner_power_target_w{type=\"current\",job=\"braiinsos-data\",label=~\"$label\"}) or sum by (instance) (miner_power{type=\"estimated\",job=\"braiinsos-data\",label=~\"$label\"})) / on (instance) group_left(model) (sum by (instance) (rate(stratum_accepted_shares_counter{job=\"braiinsos-data\",label=~\"$label\"}[$interval])) * 2^32 / 1e12)) + on (instance) group_left(model) (miner_metadata{job=\"braiinsos-data\",label=~\"$label\"})) < 1e12)",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "Estimated Power",
           "refId": "A"
@@ -988,10 +1156,15 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Number of currently tuning devices (only for BOS+ devices)",
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "#F2CC0C",
             "mode": "thresholds"
           },
           "links": [
@@ -1006,6 +1179,7 @@
               "options": {
                 "match": "null+nan",
                 "result": {
+                  "color": "#525252",
                   "index": 0,
                   "text": "N/A"
                 }
@@ -1017,7 +1191,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-purple",
+                "color": "#ed9419",
                 "value": null
               }
             ]
@@ -1029,7 +1203,7 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 18,
+        "x": 15,
         "y": 11
       },
       "id": 153,
@@ -1040,23 +1214,26 @@
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "lastNotNull"
+            "last"
           ],
           "fields": "",
           "values": false
         },
+        "text": {
+          "valueSize": 34
+        },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "PABF2E7BD7AE7B0F4"
           },
-          "exemplar": true,
+          "exemplar": false,
           "expr": "count(max by(instance) (tuner_stage{job=\"braiinsos-data\",label=~\"$label\"} == 2 or tuner_stage{job=\"braiinsos-data\",label=~\"$label\"} == 3))",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "Estimated Power",
           "refId": "A"
@@ -1066,6 +1243,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Number of devices with less than 3 hasboards hashing.",
       "fieldConfig": {
         "defaults": {
@@ -1084,6 +1265,7 @@
               "options": {
                 "match": "null+nan",
                 "result": {
+                  "color": "#525252",
                   "index": 0,
                   "text": "N/A"
                 }
@@ -1095,7 +1277,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-red",
+                "color": "#f95355",
                 "value": null
               }
             ]
@@ -1106,7 +1288,7 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 21,
+        "x": 18,
         "y": 11
       },
       "id": 53,
@@ -1122,9 +1304,12 @@
           "fields": "",
           "values": false
         },
+        "text": {
+          "valueSize": 34
+        },
         "textMode": "auto"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -1143,7 +1328,96 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
+      "description": "Number of miners with invalid Braiins OS+ license. Reasons could be: \n\n* expired license\n* limited license \n\n*Click on the graph to see list of all devices with invalid license* ",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "d/syQG2Ha4z/drill-down-invalid-license-instance"
+            }
+          ],
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "#13a454",
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 21,
+        "y": 11
+      },
+      "id": 170,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 34
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count(license_state{job=\"braiinsos-data\",label=~\"$label\"} > 1)\n# 0: None\n# 1: Valid\n# 2: Expired\n# 3: Limited",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "License Not Available",
+      "type": "stat"
+    },
+    {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1152,10 +1426,23 @@
       },
       "id": 139,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Hashrate",
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Real (valid) and nominal hashrate over time",
       "fieldConfig": {
         "defaults": {
@@ -1163,6 +1450,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -1226,7 +1515,8 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -1262,6 +1552,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Hashrate by type (segmentation only for BOS+): \\\n*duplicate*: duplicate shares which are producing duplicate hashrate \\\n*invalid*: stales and other rejects are producing invalid hashrate \\\n*valid*: accepted shares producing valid hashrate",
       "fieldConfig": {
         "defaults": {
@@ -1269,6 +1563,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -1333,7 +1629,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-green",
+                  "fixedColor": "#4b8aff",
                   "mode": "fixed"
                 }
               }
@@ -1348,7 +1644,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-orange",
+                  "fixedColor": "#c063f9",
                   "mode": "fixed"
                 }
               }
@@ -1363,7 +1659,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-red",
+                  "fixedColor": "#f95355",
                   "mode": "fixed"
                 }
               }
@@ -1382,7 +1678,8 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -1406,11 +1703,16 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Miners with lowest MCR \\\nClick to the column to get redirected to the miner \\\n**Measured to calculated ratio**: real hashrate / nominal hashrate \\\nnote: MCR not available for Antminers S9 with BOS+",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "fixedColor": "#6f6f6f",
+            "mode": "thresholds"
           },
           "decimals": 0,
           "displayName": "${__series.name}",
@@ -1434,14 +1736,18 @@
             }
           ],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
+                "color": "#f95355",
                 "value": null
               },
               {
-                "color": "red",
+                "color": "#c063f9",
+                "value": 50
+              },
+              {
+                "color": "#8b7cff",
                 "value": 80
               }
             ]
@@ -1459,17 +1765,19 @@
       "id": 30,
       "options": {
         "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
-            "lastNotNull"
+            "last"
           ],
           "fields": "",
           "values": false
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -1489,31 +1797,510 @@
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 34
       },
+      "id": 172,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Braiins OS+ License",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
+      "description": "Number of Braiins OS+ devices per contract",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "Contract: ${__field.labels.contract_name}",
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "#525252",
+                  "index": 0,
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ffffff",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 35
+      },
+      "id": 174,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 34
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count by (contract_name,license_type) (license_details{job=~\"$OS\",label=~\"$label\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "License Details",
+          "refId": "A"
+        }
+      ],
+      "title": "License Details",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
+      "description": "List of currently fired or pending alerts",
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 35
+      },
+      "id": 180,
+      "options": {
+        "alertInstanceLabelFilter": "",
+        "alertName": "",
+        "dashboardAlerts": false,
+        "groupBy": [],
+        "groupMode": "default",
+        "maxItems": 20,
+        "sortOrder": 1,
+        "stateFilter": {
+          "error": true,
+          "firing": true,
+          "noData": false,
+          "normal": false,
+          "pending": true
+        },
+        "viewMode": "list"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Braiins OS+ License Alert List",
+      "type": "alertlist"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
+      "description": "Overview of Braiins OS+ licenses\n* None - no license yet, device in initialization period\n* Valid - valid license\n* Limited - no license, initialization period passed, 15% of hashrate is drained\n* Expired - expired licence, 15% of hashrate is drained\n* Legacy BOS+ - legacy BOS+ not supporting licenses",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "${__field.displayName}",
+          "links": [
+            {
+              "targetBlank": true,
+              "title": "",
+              "url": "d/kznoUNa4k/drill-down-license-instance?orgId=1"
+            }
+          ],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#f4f4f4",
+                "value": null
+              },
+              {
+                "color": "#f95355",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 40
+      },
+      "id": 178,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 34
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count(license_state{job=\"braiinsos-data\",label=~\"$label\"} == 0)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "None",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count(license_state{job=\"braiinsos-data\",label=~\"$label\"} == 1)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Active",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count(license_state{job=\"braiinsos-data\",label=~\"$label\"} == 2)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Expired",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count(license_state{job=\"braiinsos-data\",label=~\"$label\"} == 3)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Limited",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count((license_state or on (instance, job) miner_metadata{job=\"braiinsos-data\"} -10) < 0)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Legacy BOS+",
+          "refId": "E"
+        }
+      ],
+      "title": "License States",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
+      "description": "Red: **Limited** and **Expired** licenses \\\nYellow: **Valid** licenses with less then 2.5 hours till expiration or **uninitialized** device for more than 5 minutes",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "${__field.displayName}",
+          "mappings": [
+            {
+              "options": {
+                "match": "null+nan",
+                "result": {
+                  "color": "#13a454",
+                  "index": 0,
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#8b7cff",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Not Available Licenses"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#f95355",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "d/syQG2Ha4z/drill-down-invalid-license-instance?orgId=1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "No License (Initialization)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#ed9419",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "d/Kzx8BHa4k/drill-down-no-license-instance?orgId=1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Soon Expired Licenses"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#ed9419",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "d/S-TbaN-Vz/drill-down-soon-expired-license-instance?orgId=1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 12,
+        "y": 40
+      },
+      "id": 176,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 34
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "count(license_state{job=\"braiinsos-data\",label=~\"$label\"} > 1)\n# 0: None\n# 1: Valid\n# 2: Expired\n# 3: Limited",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Not Available Licenses",
+          "refId": "Not Available"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count(license_state{job=\"braiinsos-data\",label=~\"$label\"} == 0 and license_time_to_limited < 55 * 60)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "No License (Initialization)",
+          "refId": "NoLicense"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "count(license_state{job=\"braiinsos-data\",label=~\"$label\"} == 1 and license_time_to_restricted_seconds < 150 * 60)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Soon Expired Licenses",
+          "refId": "SoonExpired"
+        }
+      ],
+      "title": "License Alerts",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 44
+      },
       "id": 152,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Miner Count",
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Number of miners sending data.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "fixedColor": "#2460ff",
+            "mode": "fixed"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 21,
+            "fillOpacity": 22,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -1521,7 +2308,7 @@
               "viz": false
             },
             "lineInterpolation": "linear",
-            "lineWidth": 3,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -1566,14 +2353,15 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 35
+        "y": 45
       },
       "id": 29,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "hidden",
-          "placement": "bottom"
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
         },
         "tooltip": {
           "mode": "single",
@@ -1597,6 +2385,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Number of instances that are monitored (scraped by Prometheus) successfully (Up) or not (Down).",
       "fieldConfig": {
         "defaults": {
@@ -1604,11 +2396,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 21,
+            "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -1616,7 +2410,7 @@
               "viz": false
             },
             "lineInterpolation": "linear",
-            "lineWidth": 3,
+            "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -1652,7 +2446,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "red",
+                  "fixedColor": "#f95355",
                   "mode": "fixed"
                 }
               }
@@ -1667,7 +2461,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "green",
+                  "fixedColor": "#13a454",
                   "mode": "fixed"
                 }
               }
@@ -1679,21 +2473,22 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 35
+        "y": 45
       },
       "id": 38,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -1728,18 +2523,35 @@
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 53
       },
       "id": 135,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Temperature Control",
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "At first, Maximum temperature is taken from each instance (miner).  Then Minimum, Average, and Maximum is calculated. \\\n\\\n*note: temperatures > 200 C are filtered out because such values are nonsense (but they can appear in Stock FW when the miner has problems with fan detection)*",
       "fieldConfig": {
         "defaults": {
@@ -1747,6 +2559,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -1811,7 +2625,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-red",
+                  "fixedColor": "#d9222c",
                   "mode": "fixed"
                 }
               }
@@ -1826,7 +2640,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-green",
+                  "fixedColor": "#13a454",
                   "mode": "fixed"
                 }
               }
@@ -1841,7 +2655,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-blue",
+                  "fixedColor": "#fe8431",
                   "mode": "fixed"
                 }
               }
@@ -1853,14 +2667,15 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 44
+        "y": 54
       },
       "id": 36,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -1908,11 +2723,15 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Top 10 instances by highest temperature. \\\n\\\n*note: temperatures > 200 C are filtered out because such values are nonsense (but they can appear in Stock FW when the miner has problems with fan detection)*",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-GrYlRd"
+            "mode": "thresholds"
           },
           "decimals": 0,
           "displayName": "${__series.name}",
@@ -1936,11 +2755,15 @@
             }
           ],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
+                "color": "#2460ff",
                 "value": null
+              },
+              {
+                "color": "#4b8aff",
+                "value": 30
               },
               {
                 "color": "red",
@@ -1956,11 +2779,13 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 44
+        "y": 54
       },
       "id": 27,
       "options": {
         "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -1971,7 +2796,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -1990,6 +2815,10 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Maximum fan speed is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated.",
       "fieldConfig": {
         "defaults": {
@@ -1997,6 +2826,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -2061,7 +2892,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-red",
+                  "fixedColor": "#2460ff",
                   "mode": "fixed"
                 }
               }
@@ -2076,7 +2907,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-green",
+                  "fixedColor": "#a72dea",
                   "mode": "fixed"
                 }
               }
@@ -2091,7 +2922,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "dark-blue",
+                  "fixedColor": "#56d8e0",
                   "mode": "fixed"
                 }
               }
@@ -2103,14 +2934,15 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 53
+        "y": 63
       },
       "id": 40,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -2158,6 +2990,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Maximum RPM is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated per each miner model.",
       "fieldConfig": {
         "defaults": {
@@ -2166,7 +3002,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "decimals": 0,
           "mappings": [],
@@ -2187,11 +3026,12 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 53
+        "y": 63
       },
       "id": 169,
       "options": {
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -2201,7 +3041,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -2286,22 +3126,40 @@
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 61
+        "y": 71
       },
       "id": 141,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Mining Pools",
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Active pool connections calculated as count over all miners",
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "#009da7",
             "mode": "continuous-BlPu"
           },
           "displayName": "${__series.name}",
@@ -2325,15 +3183,15 @@
             }
           ],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
+                "color": "#005e5e",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#13a454",
+                "value": 50
               }
             ]
           }
@@ -2344,11 +3202,13 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 62
+        "y": 72
       },
       "id": 25,
       "options": {
         "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -2359,7 +3219,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -2378,11 +3238,16 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Dead pool connections calculated as count over all miners",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-BlPu"
+            "fixedColor": "#f95355",
+            "mode": "fixed"
           },
           "displayName": "${__series.name}",
           "links": [
@@ -2424,11 +3289,13 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 62
+        "y": 72
       },
       "id": 24,
       "options": {
         "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -2439,7 +3306,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -2458,6 +3325,10 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Pools URLs defined in the configuration of the individual miners, where no mining activity is detected.",
       "fieldConfig": {
         "defaults": {
@@ -2465,6 +3336,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -2524,14 +3397,15 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 69
+        "y": 79
       },
       "id": 49,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -2555,6 +3429,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Number of active connections per mining protocol ~ SV1 vs. SV2.",
       "fieldConfig": {
         "defaults": {
@@ -2597,12 +3475,14 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 69
+        "y": 79
       },
       "id": 149,
       "options": {
-        "displayMode": "lcd",
-        "orientation": "horizontal",
+        "displayMode": "basic",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "vertical",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -2610,9 +3490,12 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": true
+        "showUnfilled": true,
+        "text": {
+          "titleSize": 24
+        }
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -2621,8 +3504,10 @@
           },
           "exemplar": false,
           "expr": "count by (protocol) (client_status{job=~\"$OS\",label=~\"$label\",connection_type=\"user\"} == 1)",
+          "format": "time_series",
           "instant": true,
           "interval": "",
+          "intervalFactor": 1,
           "legendFormat": "{{protocol}}",
           "refId": "A"
         }
@@ -2641,22 +3526,40 @@
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 77
+        "y": 87
       },
       "id": 145,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Miners",
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Model types of the miners",
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "#8d8d8d",
             "mode": "continuous-BlPu"
           },
           "displayName": "${__series.name}",
@@ -2695,11 +3598,13 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 78
+        "y": 88
       },
       "id": 57,
       "options": {
-        "displayMode": "lcd",
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -2710,7 +3615,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -2729,10 +3634,15 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Version of the firmware \\\n*BOS+*: bos:{version} \\\n*Stock FW*: stock:{version}",
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "#8d8d8d",
             "mode": "continuous-BlPu"
           },
           "displayName": "${__series.name}",
@@ -2772,11 +3682,13 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 78
+        "y": 88
       },
       "id": 55,
       "options": {
-        "displayMode": "lcd",
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -2787,7 +3699,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -2822,20 +3734,32 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Average hashrate by miner model",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "displayName": "${__series.name}",
           "mappings": [],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
+                "color": "#f95355",
                 "value": null
+              },
+              {
+                "color": "#cfdb5c",
+                "value": 30
+              },
+              {
+                "color": "#34c06a",
+                "value": 60
               }
             ]
           },
@@ -2847,11 +3771,13 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 86
+        "y": 96
       },
       "id": 164,
       "options": {
-        "displayMode": "basic",
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -2862,7 +3788,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -2881,6 +3807,10 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Average, min and max efficiency by each miner model. Available only for *BOS+*",
       "fieldConfig": {
         "defaults": {
@@ -2889,8 +3819,11 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto",
-            "filterable": false
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
           },
           "links": [
             {
@@ -2918,11 +3851,12 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 86
+        "y": 96
       },
       "id": 166,
       "options": {
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -2937,7 +3871,7 @@
           }
         ]
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -2950,7 +3884,7 @@
           "instant": true,
           "interval": "",
           "legendFormat": "{{model}}",
-          "refId": "MinEff"
+          "refId": "MaxEff"
         },
         {
           "datasource": {
@@ -2964,7 +3898,7 @@
           "instant": true,
           "interval": "",
           "legendFormat": "{{model}}",
-          "refId": "MaxEff"
+          "refId": "MinEff"
         },
         {
           "datasource": {
@@ -3051,18 +3985,35 @@
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 94
+        "y": 104
       },
       "id": 32,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Power Target (only BOS+)",
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Power target is taken from each instance (miner).  Minimum, Average, and Maximum is then calculated (BOS+ only)",
       "fieldConfig": {
         "defaults": {
@@ -3070,6 +4021,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -3176,7 +4129,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 95
+        "y": 105
       },
       "id": 45,
       "links": [],
@@ -3184,7 +4137,8 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -3232,6 +4186,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Estimated power consumption in Watts and power target (only BOS+).",
       "fieldConfig": {
         "defaults": {
@@ -3239,6 +4197,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -3299,14 +4259,15 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 95
+        "y": 105
       },
       "id": 43,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -3343,23 +4304,40 @@
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 102
+        "y": 112
       },
       "id": 159,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Users",
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Hashrate by pool user",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "displayName": "${__series.name}",
           "links": [
@@ -3383,11 +4361,19 @@
           ],
           "min": 0,
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "semi-dark-purple",
+                "color": "#f95355",
                 "value": null
+              },
+              {
+                "color": "#cfdb5c",
+                "value": 30
+              },
+              {
+                "color": "#34c06a",
+                "value": 60
               }
             ]
           },
@@ -3399,11 +4385,13 @@
         "h": 5,
         "w": 12,
         "x": 0,
-        "y": 103
+        "y": 113
       },
       "id": 161,
       "options": {
-        "displayMode": "lcd",
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
@@ -3414,7 +4402,7 @@
         },
         "showUnfilled": true
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -3449,11 +4437,16 @@
       "type": "bargauge"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Actual no. of devices per user. *BOS+* has a feature to \"slice\" a miner into pool groups, so that it is possible to mine on multiple users in the same time. The miner has to mining.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-BlPu"
+            "fixedColor": "#262626",
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
@@ -3477,14 +4470,14 @@
         "h": 5,
         "w": 12,
         "x": 12,
-        "y": 103
+        "y": 113
       },
       "id": 162,
       "options": {
-        "colorMode": "background",
+        "colorMode": "none",
         "graphMode": "none",
         "justifyMode": "auto",
-        "orientation": "auto",
+        "orientation": "vertical",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -3492,9 +4485,13 @@
           "fields": "",
           "values": false
         },
+        "text": {
+          "titleSize": 16,
+          "valueSize": 34
+        },
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -3513,6 +4510,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "Hashrate per user, *BOS+* devices are taking into account only accpeted shares. *Stock FW* devices are taking in to account all shares since cgminer API doesn't provide invalid/rejected shares. ",
       "fieldConfig": {
         "defaults": {
@@ -3520,6 +4521,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -3569,14 +4572,15 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 108
+        "y": 118
       },
       "id": 157,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -3600,6 +4604,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PABF2E7BD7AE7B0F4"
+      },
       "description": "No. of devices per user. *BOS+* has a feature to \"slice\" a miner into pool groups, so that it is possible to mine on multiple users at the same time.",
       "fieldConfig": {
         "defaults": {
@@ -3607,6 +4615,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -3652,14 +4662,15 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 108
+        "y": 118
       },
       "id": 160,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -3684,7 +4695,8 @@
     }
   ],
   "refresh": "1m",
-  "schemaVersion": 35,
+  "revision": 1,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -3695,6 +4707,10 @@
           "selected": false,
           "text": "All",
           "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PABF2E7BD7AE7B0F4"
         },
         "definition": "label_values(job)",
         "description": "Firmware - braiinsos-data stands for the BOS+ and metrics-exporter stands for the stock FW",
@@ -3719,6 +4735,10 @@
           "selected": false,
           "text": "All",
           "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PABF2E7BD7AE7B0F4"
         },
         "definition": "label_values(client_status, label)",
         "description": "Name of the IP range. In this example case, the IP range represents building.",
@@ -3751,7 +4771,7 @@
         "name": "interval",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "5m",
             "value": "5m"
           },
@@ -3781,6 +4801,6 @@
   "timezone": "",
   "title": "Farm Dashboard",
   "uid": "X5qFFjI4z",
-  "version": 40,
+  "version": 7,
   "weekStart": ""
 }

@@ -21,12 +21,11 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 21,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "description": "List os currently tuning devices (only *BOS+*)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -34,22 +33,59 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto",
+            "displayMode": "color-text",
             "filterable": true
           },
-          "links": [],
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
               }
             ]
           }
         },
         "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "License State"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "dark-yellow",
+                        "index": 0,
+                        "text": "None"
+                      },
+                      "1": {
+                        "color": "dark-green",
+                        "index": 1,
+                        "text": "Valid"
+                      },
+                      "2": {
+                        "color": "dark-red",
+                        "index": 2,
+                        "text": "Expired"
+                      },
+                      "3": {
+                        "color": "dark-red",
+                        "index": 3,
+                        "text": "Limited"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
           {
             "matcher": {
               "id": "byName",
@@ -61,8 +97,8 @@
                 "value": [
                   {
                     "targetBlank": true,
-                    "title": "Go to miner",
-                    "url": "http://${__value.text}"
+                    "title": "Go to the miner GUI",
+                    "url": "http://${__data.fields.Miner}"
                   }
                 ]
               }
@@ -71,8 +107,8 @@
         ]
       },
       "gridPos": {
-        "h": 16,
-        "w": 23,
+        "h": 27,
+        "w": 24,
         "x": 0,
         "y": 0
       },
@@ -85,8 +121,7 @@
           ],
           "show": false
         },
-        "showHeader": true,
-        "sortBy": []
+        "showHeader": true
       },
       "pluginVersion": "9.5.1",
       "targets": [
@@ -96,7 +131,7 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "tuner_stage{job=\"braiinsos-data\"} == 2 or tuner_stage{job=\"braiinsos-data\"} == 3",
+          "expr": "min by (instance) (license_state{job=\"braiinsos-data\"} == 0 and license_time_to_restricted_seconds < 55 * 60)\n+ on (instance) group_left(device_id, os_version) (miner_metadata) \n#+ on (instance) group_left(contract_name, license_type, devfee) (license_details)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -104,48 +139,32 @@
           "refId": "A"
         }
       ],
-      "title": "Tuning Instances",
+      "title": "No License Yet",
       "transformations": [
         {
           "id": "organize",
           "options": {
             "excludeByName": {
-              "Field": true,
-              "Last": true,
-              "Time": true,
-              "Value": true,
-              "__name__": true,
-              "client_id": true,
-              "connection_type": true,
-              "host": true,
-              "host_id": true,
-              "job": true
+              "Time": true
             },
             "indexByName": {
-              "Time": 8,
-              "Value": 9,
-              "__name__": 0,
-              "hashboard": 6,
-              "host_id": 1,
+              "Time": 0,
+              "Value": 3,
+              "contract_name": 4,
+              "devfee": 5,
+              "device_id": 1,
               "instance": 2,
-              "job": 7,
-              "label": 3,
-              "site_id": 4,
-              "subnet_id": 5
+              "license_type": 6,
+              "os_version": 7
             },
             "renameByName": {
-              "Last": "",
-              "Time": "Time",
-              "building": "Building",
-              "hashboard": "Hashboard ID",
-              "host": "Host",
+              "Value": "License State",
+              "contract_name": "Contract Name",
+              "devfee": "Devfee",
+              "device_id": "Device ID",
               "instance": "Miner",
-              "label": "Building",
-              "protocol": "Protocol",
-              "site_id": "Site",
-              "subnet_id": "Subnet",
-              "user": "User",
-              "worker": "Worker"
+              "license_type": "License Type",
+              "os_version": "BOS+ Version"
             }
           }
         }
@@ -153,7 +172,6 @@
       "type": "table"
     }
   ],
-  "refresh": "",
   "schemaVersion": 35,
   "style": "dark",
   "tags": [],
@@ -166,9 +184,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Drill-Down (Tuning--> Instance)",
-  "uid": "ixQBxdHVk",
-  "version": 2,
+  "title": "Drill-Down (No License --> Instance)",
+  "uid": "Kzx8BHa4k",
+  "version": 6,
   "weekStart": ""
 }
-

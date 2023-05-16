@@ -1,0 +1,21 @@
+apiVersion: 1
+# more info here https://grafana.com/docs/grafana/latest/alerting/set-up/provision-alerting-resources/file-provisioning/
+contactPoints:
+  - orgId: 1
+    # in the file ./monitoring/grafana/provisioning/grafana.ini you need to define your [smtp] to be able to get email alerts
+    name: Email
+    receivers:
+      - uid: HNEU8Ta4zz
+        type: email
+        settings:
+          addresses: your_name@your_domain.cz
+          singleEmail: false
+        disableResolveMessage: true
+      # to be able to use Telegram, it is needed to generate BOT token. Here you can read how to do it https://medium.com/geekculture/generate-telegram-token-for-bot-api-d26faf9bf064
+      - uid: mOVzlTaVk
+        type: telegram
+        settings:
+          bottoken: "token" #Telegram bottoken in ""
+          chatid: "chat_id" #Telegram bottoken in ""
+          disable_notification: false
+        disableResolveMessage: true

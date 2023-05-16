@@ -1,0 +1,17 @@
+apiVersion: 1
+
+# A mute timing is a recurring interval of time when no new notifications for a policy are generated or sent.
+# Use them to prevent alerts from firing a specific and reoccurring period, for example, a regular maintenance period.
+# Read more at https://grafana.com/docs/grafana/latest/alerting/manage-notifications/mute-timings/
+
+# To allow mute timings, uncomment time_intervals section with prepared simple config. User can modify it to meet his needs.
+# Read more about time interval at at https://prometheus.io/docs/alerting/latest/configuration/#time_interval-0
+muteTimes:
+  - orgId: 1
+    name: mti_1
+    #time_intervals:
+    #  - times:
+    #      - start_time: '09:00'
+    #        end_time: '17:00'
+    #    weekdays: ['monday:friday']
+

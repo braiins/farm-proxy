@@ -5,7 +5,7 @@ volumes:
   scanner_data: {}
 services:
   farm-proxy:
-    image: braiinssystems/farm-proxy:23.01 # Will be replaced with braiinssystems/farm-proxy:TAG upon public release
+    image: braiinssystems/farm-proxy:23.05 # Will be replaced with braiinssystems/farm-proxy:TAG upon public release
     container_name: farm-proxy
     network_mode: "host"
     volumes:
@@ -21,6 +21,10 @@ services:
         max-size: "100m"
         max-file: "50"
         compress: "true"
+    ulimits:
+      nofile:
+        hard: "1048576"
+        soft: "262144"
   # metrics-exporter is a program, which performs device discovery on the defined network and pulls data from miners running a Stock FW. As a result, those data can be digested by Prometheus and visualized in Grafana dashboard, see dashboard "Farm Dashboard"
   metrics-exporter:
     image: braiinssystems/farm-monitor:23.01
@@ -57,31 +61,8 @@ services:
         compress: "true"
     labels:
       org.label-schema.group: "monitoring"
-      # nodeexporter is a container designed to monitor the host system, more info in https://github.com/prometheus/node_exporter
-      # nodeexporter:
-      #   image: prom/node-exporter:latest
-      #   container_name: nodeexporter
-      #   network_mode: "host"
-      #   volumes:
-      #     - /proc:/host/proc:ro
-      #     - /sys:/host/sys:ro
-      #     - /:/rootfs:ro
-      #   command:
-      #     - '--path.procfs=/host/proc'
-      #     - '--path.rootfs=/rootfs'
-      #     - '--path.sysfs=/host/sys'
-      #     - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-      #   restart: unless-stopped
-      #   logging:
-      #     driver: "json-file"
-      #     options:
-      #       max-size: "10m"
-      #       max-file: "5"
-      #       compress: "true"
-      #   labels:
-      #     org.label-schema.group: "monitoring"
   grafana:
-    image: grafana/grafana:8.4.0
+    image: grafana/grafana:9.5.1
     container_name: grafana
     network_mode: "host"
     depends_on:

@@ -1,0 +1,201 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 20,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "description": "Table of Braiins OS+ devices with the state of the License. *Legacy BOS+* standas for older version of the firmware which doesn't support licenses, only standard devfee.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "color-text"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "License State"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "dark-yellow",
+                        "index": 0,
+                        "text": "None"
+                      },
+                      "1": {
+                        "color": "dark-green",
+                        "index": 1,
+                        "text": "Valid"
+                      },
+                      "2": {
+                        "color": "dark-red",
+                        "index": 2,
+                        "text": "Expired"
+                      },
+                      "3": {
+                        "color": "dark-red",
+                        "index": 3,
+                        "text": "Limited"
+                      },
+                      "-1": {
+                        "color": "dark-purple",
+                        "index": 4,
+                        "text": "Legacy BOS+"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Miner"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Go to the miner GUI",
+                    "url": "http://${__data.fields.Miner}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 26,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "9.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PABF2E7BD7AE7B0F4"
+          },
+          "exemplar": false,
+          "expr": "(((license_state + on(instance) group_left(contract_name,license_type) license_details) or on (instance) license_state) or on (instance, job) miner_metadata-1) + on (instance) group_left(device_id,os_version)(miner_metadata)",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Braiins OS+ Devices & Licenses",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "host_id": true,
+              "job": true,
+              "label": true,
+              "model": true,
+              "subnet_id": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value": 3,
+              "contract_name": 4,
+              "devfee": 5,
+              "device_id": 1,
+              "instance": 2,
+              "license_type": 6,
+              "os_version": 7
+            },
+            "renameByName": {
+              "Value": "License State",
+              "contract_name": "Contract Name",
+              "devfee": "Devfee",
+              "device_id": "Device ID",
+              "instance": "Miner",
+              "license_type": "License Type",
+              "os_version": "BOS+ Version"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "schemaVersion": 35,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Drill-Down (License --> Instance)",
+  "uid": "kznoUNa4k",
+  "version": 8,
+  "weekStart": ""
+}

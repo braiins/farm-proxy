@@ -1,0 +1,274 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: invalid-license
+      folder: Alerts
+      interval: 1m
+      rules:
+        - uid: LTLa_oaVz
+          title: Invalid Braiins OS+ Licences
+          condition: Condition
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 86400
+                to: 0
+              datasourceUid: PABF2E7BD7AE7B0F4
+              model:
+                editorMode: code
+                exemplar: false
+                expr: count(license_state{job="braiinsos-data"} > 1) > 0
+                hide: false
+                instant: false
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: true
+                refId: A
+            - refId: Number of affected miners
+              relativeTimeRange:
+                from: 86400
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: Number of affected miners
+                type: reduce
+            - refId: Condition
+              relativeTimeRange:
+                from: 86400
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: Number of affected miners
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: Condition
+                type: threshold
+          dashboardUid: syQG2Ha4z
+          panelId: 2
+          noDataState: OK
+          execErrState: Error
+          for: 5m
+          annotations:
+            __dashboardUid__: syQG2Ha4z
+            __panelId__: "2"
+            description: Invalid Licenses
+            summary: Invalid Licenses
+          labels:
+            severity: critical
+            type: license
+          isPaused: false
+        - uid: AhDpvAa4z
+          title: No Braiins OS+ Licences
+          condition: Condition
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: PABF2E7BD7AE7B0F4
+              model:
+                editorMode: code
+                expr: count(license_state{job="braiinsos-data"} == 0 and license_time_to_restricted_seconds < 55 * 60) > 0
+                hide: false
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: true
+                refId: A
+            - refId: Number of affected miners
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: Number of affected miners
+                type: reduce
+            - refId: Condition
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: Number of affected miners
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: Condition
+                type: threshold
+          dashboardUid: Kzx8BHa4k
+          panelId: 2
+          noDataState: OK
+          execErrState: Error
+          for: 5m
+          annotations:
+            __dashboardUid__: Kzx8BHa4k
+            __panelId__: "2"
+            description: No Braiins OS+ License
+            summary: No Braiins OS+ License
+          labels:
+            severity: warning
+            type: license
+          isPaused: false
+        - uid: GnxL0AaVz
+          title: Soon Expired Braiins OS+ Licences
+          condition: Condition
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: PABF2E7BD7AE7B0F4
+              model:
+                editorMode: code
+                expr: count(license_state{job="braiinsos-data",label=~"$label"} == 1 and license_time_to_restricted_seconds < 150 * 60) > 0
+                hide: false
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: true
+                refId: A
+            - refId: Number of affected miners
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params: []
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - B
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: Number of affected miners
+                type: reduce
+            - refId: Condition
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: Number of affected miners
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: Condition
+                type: threshold
+          noDataState: OK
+          execErrState: Alerting
+          for: 5m
+          annotations:
+            summary: Soon Expired Braiins OS+ Licences
+          labels:
+            severity: warning
+            type: license
+          isPaused: false

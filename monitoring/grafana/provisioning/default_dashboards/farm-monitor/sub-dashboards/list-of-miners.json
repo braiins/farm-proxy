@@ -255,7 +255,7 @@
           }
         ]
       },
-      "pluginVersion": "8.4.0",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -487,3 +487,4 @@
   "version": 4,
   "weekStart": ""
 }
+

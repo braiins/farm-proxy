@@ -21,12 +21,12 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1669993476592,
+  "id": 19,
   "links": [],
   "liveNow": false,
   "panels": [
     {
+      "description": "Table covering devices with invalid Braiins OS+ license. Those devices have either **expired** license or **none** (not initialized) license.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -34,7 +34,7 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto",
+            "displayMode": "color-text",
             "filterable": true
           },
           "links": [],
@@ -43,12 +43,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -57,20 +53,36 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Miner"
+              "options": "License State"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": false
-              },
-              {
-                "id": "links",
+                "id": "mappings",
                 "value": [
                   {
-                    "targetBlank": true,
-                    "title": "Go to the miner",
-                    "url": "http://${__value.text}"
+                    "options": {
+                      "0": {
+                        "color": "dark-yellow",
+                        "index": 0,
+                        "text": "None"
+                      },
+                      "1": {
+                        "color": "dark-green",
+                        "index": 1,
+                        "text": "Valid"
+                      },
+                      "2": {
+                        "color": "dark-red",
+                        "index": 2,
+                        "text": "Expired"
+                      },
+                      "3": {
+                        "color": "dark-red",
+                        "index": 3,
+                        "text": "Limited"
+                      }
+                    },
+                    "type": "value"
                   }
                 ]
               }
@@ -79,28 +91,16 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "OS"
+              "options": "Miner"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": false
-              },
-              {
-                "id": "mappings",
+                "id": "links",
                 "value": [
                   {
-                    "options": {
-                      "braiinsos-data": {
-                        "index": 0,
-                        "text": "BOS+"
-                      },
-                      "metrics-exporter": {
-                        "index": 1,
-                        "text": "Stock FW"
-                      }
-                    },
-                    "type": "value"
+                    "targetBlank": true,
+                    "title": "Go to the miner GUI",
+                    "url": "http://${__data.fields.Miner}"
                   }
                 ]
               }
@@ -109,8 +109,8 @@
         ]
       },
       "gridPos": {
-        "h": 16,
-        "w": 23,
+        "h": 27,
+        "w": 24,
         "x": 0,
         "y": 0
       },
@@ -133,57 +133,47 @@
             "uid": "PABF2E7BD7AE7B0F4"
           },
           "exemplar": false,
-          "expr": "miner_metadata{os_version=~\"$os_version\"}",
+          "expr": "((min by (instance) (license_state) \n+ on (instance) group_left(device_id, os_version) (miner_metadata))\n#+ on (instance) group_left(contract_name, license_type, devfee) (license_details))\nor\n(min by (instance) (license_state) \n+ on (instance) group_left(device_id, os_version) (miner_metadata))) > 1",
+          "format": "table",
+          "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
-      "title": "OS Version",
+      "title": "Invalid Licenses",
       "transformations": [
-        {
-          "id": "reduce",
-          "options": {
-            "labelsToFields": true,
-            "reducers": [
-              "last"
-            ]
-          }
-        },
         {
           "id": "organize",
           "options": {
             "excludeByName": {
-              "Field": true,
-              "Last": true,
-              "__name__": true,
-              "fw": true,
+              "Time": true,
+              "__name__": false,
               "host_id": true,
+              "job": true,
               "site_id": true,
               "subnet_id": true
             },
             "indexByName": {
-              "Field": 0,
-              "Last": 11,
-              "__name__": 1,
-              "device_id": 2,
-              "host_id": 3,
-              "instance": 4,
-              "job": 5,
-              "label": 7,
-              "model": 8,
-              "os_version": 6,
-              "site_id": 9,
-              "subnet_id": 10
+              "Time": 0,
+              "Value": 3,
+              "contract_name": 4,
+              "devfee": 5,
+              "device_id": 1,
+              "instance": 2,
+              "license_type": 6,
+              "os_version": 7
             },
             "renameByName": {
+              "Value": "License State",
+              "Value #A": "License State",
+              "contract_name": "Contract Name",
+              "devfee": "Devfee",
               "device_id": "Device ID",
               "instance": "Miner",
-              "job": "OS",
-              "label": "Building",
-              "model": "Model",
-              "os_version": "OS Version"
+              "license_type": "License Type",
+              "os_version": "BOS+ Version"
             }
           }
         }
@@ -196,31 +186,7 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": [
-      {
-        "current": {
-          "selected": true,
-          "text": "All",
-          "value": "$__all"
-        },
-        "definition": "label_values(os_version)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "OS Version",
-        "multi": false,
-        "name": "os_version",
-        "options": [],
-        "query": {
-          "query": "label_values(os_version)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      }
-    ]
+    "list": []
   },
   "time": {
     "from": "now-6h",
@@ -228,9 +194,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Drill-Down (OS Version --> Instance)",
-  "uid": "uZT-Tds7z",
-  "version": 6,
+  "title": "Drill-Down (Invalid License --> Instance)",
+  "uid": "syQG2Ha4z",
+  "version": 9,
   "weekStart": ""
 }
-
