@@ -1,0 +1,37 @@
+description = "Simple configuration - one server, one target with a backup, configuration of Braiins Pool username for BOS bonus."
+
+[[server]]
+name = "S1"
+port = 3333
+braiinspool_bos_bonus = "userName" #does not have effect if not using Braiins OS or not mining at Braiins Pool
+
+[[target]]
+name = "Braiins Pool EU"
+url = "stratum+tcp://eu.stratum.braiins.com:3333"
+user_identity = "userName.workerName"
+
+[[target]]
+name = "Braiins Pool US"
+url = "stratum+tcp://us-east.stratum.braiins.com:3333"
+user_identity = "userName.workerName"
+
+[[target]]
+name = "Braiins Pool"
+url = "stratum+tcp://stratum.braiins.com:3333"
+user_identity = "userName.workerName"
+
+[[routing]]
+name = "RD"
+from = ["S1"]
+
+[[routing.goal]]
+name = "Primary Goal"
+hr_weight = 100
+
+[[routing.goal.level]]
+targets = ["Braiins Pool US"]
+#use below target instead in EU
+#targets = ["Braiins Pool EU"]
+
+[[routing.goal.level]]
+targets = ["Braiins Pool"]

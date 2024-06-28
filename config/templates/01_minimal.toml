@@ -1,0 +1,20 @@
+description="Minimal configuration - one server, one target, no backup."
+
+[[server]]
+name = "S1"
+port = 3333
+
+[[target]]
+name = "Braiins Pool"
+url = "stratum+tcp://stratum.braiins.com:3333"
+user_identity = "userName.workerName"
+
+[[routing]]
+name = "RD"
+from = ["S1"]
+
+[[routing.goal]]
+name = "Primary Goal"
+
+[[routing.goal.level]]
+targets = ["Braiins Pool"]

@@ -5,7 +5,7 @@ scrape_configs:
   - job_name: "prometheus"
     scrape_interval: 15s
     static_configs:
-    - targets: ["localhost:9090"]
+    - targets: ["prometheus:9090"]
 
 #  - job_name: "node"
 #    static_configs:
@@ -14,14 +14,14 @@ scrape_configs:
   - job_name: "farm-proxy"
     metrics_path: "/metrics"
     static_configs:
-      - targets: ["localhost:8080"]
+      - targets: ["farm-proxy:8080"]
 
   - job_name: "metrics-exporter"
     metrics_path: "/metrics"
     honor_labels: true
     scrape_interval: 1m
     static_configs:
-      - targets: ["localhost:8081"]
+      - targets: ["metrics-exporter:8081"]
     metric_relabel_configs:
       # The following is optional. Useful if you manage your farm by using
       # subnets.

@@ -1,46 +1,73 @@
-version: '3'
 volumes:
+  config_cache:
   prometheus_data: {}
   grafana_data: {}
   scanner_data: {}
 services:
-  farm-proxy:
-    image: braiinssystems/farm-proxy:23.05 # Will be replaced with braiinssystems/farm-proxy:TAG upon public release
-    container_name: farm-proxy
-    network_mode: "host"
-    volumes:
-      - "./config/sample.toml:/conf/farm_proxy.toml"
+  farm-proxy-configurator:
+    image: braiinssystems/farm-proxy:24.06
+    container_name: farm-proxy-configurator
     environment:
-      - CONF_PATH=/conf/farm_proxy.toml
-      - RUST_LOG=info
+      - HTTP_SOCKET_OVERRIDE=farm-proxy:8080
+      - CONFIG_FILE=/config/profiles/${FP_CONFIG_PROFILE}
+    volumes:
+      - ./config:/config/profiles
+    command: ["configure"]
+    restart: "no"
+    depends_on:
+      - farm-proxy
+  farm-proxy:
+    image: braiinssystems/farm-proxy:24.06
+    container_name: farm-proxy
+    command: ["run"]
+    environment:
+      - RUST_LOG=${RUST_LOG:-info}
       - RUST_BACKTRACE=full
+      - CONFIG_FILE=/config/config_cache/last_used_config.toml
+    volumes:
+      - config_cache:/config/config_cache
     restart: unless-stopped
+    stop_grace_period: 30s
     logging:
       driver: "json-file"
       options:
         max-size: "100m"
         max-file: "50"
         compress: "true"
+    ports:
+      - "0.0.0.0:${MINING_PORTS}:${MINING_PORTS}"
     ulimits:
       nofile:
         hard: "1048576"
         soft: "262144"
-  # metrics-exporter is a program, which performs device discovery on the defined network and pulls data from miners running a Stock FW. As a result, those data can be digested by Prometheus and visualized in Grafana dashboard, see dashboard "Farm Dashboard"
-  metrics-exporter:
-    image: braiinssystems/farm-monitor:23.01
-    container_name: metrics-exporter
-    network_mode: "host"
-    volumes:
-      - ./monitoring/metrics-exporter:/etc/metrics-exporter
-      - scanner_data:/mnt:rw
-    command:
-      - '--config=/etc/metrics-exporter/metrics-exporter.toml'
-      - '--sd-file=/mnt/bos_miners.json'
+    healthcheck:
+      test: curl --fail http://localhost:8080/metrics || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 2
+      start_period: 2s
+  farm-proxy-gui:
+    image: "node:20.11-slim"
+    container_name: farm-proxy-gui
+    working_dir: "/usr/src/app"
+    command: "node --env-file=.env build/server/server.cjs"
     restart: unless-stopped
+    ports:
+      - "0.0.0.0:${GUI_PORT}:7777"
+    volumes:
+      - ./gui/build:/usr/src/app/build
+      - ./config:/usr/src/app/config
+      - ./monitoring:/usr/src/app/monitoring
+      - ./.env:/usr/src/app/.env
+    environment:
+      - "NODE_ENV=production"
+      - "FP_CONFIG_PROFILE=${FP_CONFIG_PROFILE}"
+      - "API_ENDPOINT=http://farm-proxy:8080"
+    depends_on:
+      - farm-proxy
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
-    network_mode: "host"
     volumes:
       - ./monitoring/prometheus:/etc/prometheus
       - prometheus_data:/prometheus
@@ -52,6 +79,9 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    ports:
+      - "0.0.0.0:${PROMETHEUS_PORT}:9090"
     restart: unless-stopped
     logging:
       driver: "json-file"
@@ -61,10 +91,15 @@ services:
         compress: "true"
     labels:
       org.label-schema.group: "monitoring"
+    healthcheck:
+      test: wget -q localhost:9090 -O /dev/null || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 2
+      start_period: 10s
   grafana:
     image: grafana/grafana:9.5.1
     container_name: grafana
-    network_mode: "host"
     depends_on:
       - prometheus
     volumes:
@@ -76,6 +111,8 @@ services:
       #- GF_USERS_ALLOW_SIGN_UP=true
       - GF_PATHS_CONFIG=/etc/grafana/provisioning/grafana.ini
       - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/default_dashboards/farm-proxy/client_dashboard.json
+    ports:
+      - "0.0.0.0:${GRAFANA_PORT}:3000"
     restart: unless-stopped
     logging:
       driver: "json-file"
@@ -85,3 +122,9 @@ services:
         compress: "true"
     labels:
       org.label-schema.group: "monitoring"
+    healthcheck:
+      test: curl --fail http://localhost:3000 || exit 1
+      interval: 5s
+      timeout: 2s
+      retries: 2
+      start_period: 2s

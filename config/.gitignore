@@ -1,0 +1,8 @@
+# GUI uses active_profile.toml to store active profile configuration
+active_profile.toml
+# GUI uses .profile to store active profile name
+.profile
+# profiles backup
+/bak
+# profiles temporary changes
+/tmp

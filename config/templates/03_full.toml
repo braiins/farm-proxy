@@ -1,0 +1,55 @@
+description="Full configuration - two servers, hashrate split to two different pools. Advanced parameters settings, comments."
+
+[[server]]
+name = "S1"
+port = 3333
+braiinspool_bos_bonus = "userName" #does not have effect if not using Braiins OS or not mining at Braiins Pool
+
+[[server]]
+name = "S2"
+port = 3334
+braiinspool_bos_bonus = "userName" #does not have effect if not using Braiins OS or not mining at Braiins Pool
+
+[[target]]
+name = "Braiins Pool EU"
+url = "stratum+tcp://eu.stratum.braiins.com:3333"
+user_identity = "userName.workerName" #make sure to change this
+identity_pass_through = true #each miners keeps its name, user_identity setting is ignored.
+aggregation = 10 #lower aggregation setting in case of identity pass through makes sure the HR chart in the Pool is smoother
+
+[[target]]
+name = "Braiins Pool US"
+url = "stratum+tcp://us-east.stratum.braiins.com:3333"
+user_identity = "userName.workerName" #make sure to change this
+aggregation = 50 #50 is a default value in case this setting is deleted
+
+[[target]]
+name = "Braiins Pool"
+url = "stratum+tcp://stratum.braiins.com:3333"
+user_identity = "userName.workerName" #make sure to change this
+aggregation = 50 #50 is a default value in case this setting is deleted
+
+[[routing]] #currently only one ROUTING definition is supported. For multiple routings - multiple instances of proxy need to be deployed.
+from = ["S1", "S2"]
+
+[[routing.goal]]
+hr_weight = 70
+name = "Goal EU"
+
+[[routing.goal.level]]
+targets = ["Braiins Pool EU"]
+
+# Will be used as fallback when the first "level" is not working
+[[routing.goal.level]]
+targets = ["Braiins Pool"]
+
+[[routing.goal]]
+hr_weight = 30
+name = "Goal US"
+
+[[routing.goal.level]]
+targets = ["Braiins Pool US"]
+
+# Will be used as fallback when the first "level" is not working
+[[routing.goal.level]]
+targets = ["Braiins Pool"]

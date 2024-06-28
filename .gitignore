@@ -1,1 +1,4 @@
-.idea
+config/*
+!config/templates/01_minimal.toml
+!config/templates/02_simple.toml
+!config/templates/03_full.toml
